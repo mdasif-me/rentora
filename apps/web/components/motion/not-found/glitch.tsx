@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-// beui.dev/components/blocks/not-found
 
 import { useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";

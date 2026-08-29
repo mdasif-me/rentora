@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-// beui.dev/components/motion/button
 
 import { EASE_OUT, SPRING_SWAP } from "@/lib/ease";
 import { RiCheckLine, RiCloseLine, RiLoader4Line } from "@remixicon/react";
