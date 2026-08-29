@@ -1,4 +1,3 @@
-import { Footer, Navigation } from "@/components/container/layout";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
@@ -21,11 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={cn("h-full scroll-smooth antialiased font-sans", ibmPlexSans.variable)}
     >
-      <body className="min-h-full flex flex-col">
-        <Navigation />
-        {children}
-        <Footer />
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
