@@ -19,7 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", "font-sans", ibmPlexSans.variable)}
+      className={cn("h-full scroll-smooth antialiased font-sans", ibmPlexSans.variable)}
     >
       <body className="min-h-full flex flex-col">
         <Navigation />

@@ -1,12 +1,20 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import { HOW_IT_WORKS_HEADER, HOW_IT_WORKS_STEPS } from "./constants";
 import type { HowItWorksProps } from "./types";
 
 export default function HowItWorks({ className }: HowItWorksProps) {
   return (
-    <section className={cn("py-20 lg:py-28 bg-background overflow-hidden", className)}>
+    <motion.section
+      id="how-it-works"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
+      className={cn("py-20 lg:py-28 bg-background overflow-hidden", className)}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16 lg:mb-20">
           <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-foreground">
@@ -21,8 +29,12 @@ export default function HowItWorks({ className }: HowItWorksProps) {
           {HOW_IT_WORKS_STEPS.map((step, index) => {
             const Icon = step.icon;
             return (
-              <div
+              <motion.div
                 key={step.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
                 className={cn(
                   "relative flex flex-col items-center justify-center text-center mx-auto max-w-xs sm:max-w-sm w-full group",
                   index === 2 && "sm:col-span-2 md:col-span-1",
@@ -59,11 +71,11 @@ export default function HowItWorks({ className }: HowItWorksProps) {
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

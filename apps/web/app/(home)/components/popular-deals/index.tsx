@@ -9,6 +9,7 @@ import {
 } from "@/components/motion/tabs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import {
   CATEGORY_VEHICLES_MAP,
   POPULAR_DEALS_CATEGORIES,
@@ -28,7 +29,12 @@ export default function PopularDeals({
   };
 
   return (
-    <section
+    <motion.section
+      id="popular-deals"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
       className={cn("py-20 lg:py-28 bg-muted overflow-hidden", className)}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -62,12 +68,16 @@ export default function PopularDeals({
             return (
               <TabsContent key={cat.id} value={cat.value} className="mt-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {vehicles.map((vehicle) => (
-                    <AppCard
+                  {vehicles.map((vehicle, idx) => (
+                    <motion.div
                       key={vehicle.id}
-                      vehicle={vehicle}
-                      onRentNow={onRentNow}
-                    />
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    >
+                      <AppCard vehicle={vehicle} onRentNow={onRentNow} />
+                    </motion.div>
                   ))}
                 </div>
               </TabsContent>
@@ -92,6 +102,6 @@ export default function PopularDeals({
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -1,10 +1,10 @@
 import type { NavItem, AuthAction } from "./types";
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { id: "home", label: "Home", href: "/" },
+  { id: "home", label: "Home", href: "#hero" },
   { id: "how-it-work", label: "How it Work", href: "#how-it-works" },
-  { id: "rental-detals", label: "Rental Detals", href: "#vehicles" },
-  { id: "why-choose-us", label: "Why Choose Us", href: "#why-us" },
+  { id: "rental-detals", label: "Rental Detals", href: "#popular-deals" },
+  { id: "why-choose-us", label: "Why Choose Us", href: "#why-choose" },
   { id: "testimonial", label: "Testimonial", href: "#testimonials" },
 ] as const;
 

@@ -1,15 +1,27 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 import Image from "next/image";
 
 export default function Banner() {
   return (
-    <section className="relative overflow-hidden bg-muted min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] flex flex-col justify-center pt-6 lg:pt-20 pb-20 sm:pb-28 lg:pb-36">
+    <motion.section
+      id="hero"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="relative overflow-hidden bg-muted min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] flex flex-col justify-center pt-6 lg:pt-20 pb-20 sm:pb-28 lg:pb-36"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Content Column (Below image on small devices, Left on desktop) */}
-          <div className="w-full lg:col-span-6 flex flex-col items-start text-left space-y-6 z-10 mt-6 lg:mt-0">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full lg:col-span-6 flex flex-col items-start text-left space-y-6 z-10 mt-6 lg:mt-0"
+          >
             <span className="text-[14px] font-medium leading-[121%] text-foreground/80">
               100% Trusted Car rental platform in the UK
             </span>
@@ -41,10 +53,15 @@ export default function Banner() {
                 See all cars
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Image Column (On top on small devices, Right side on desktop) */}
-          <div className="w-full lg:col-span-6 lg:absolute lg:right-0 lg:top-12 sm:lg:top-16 lg:top-20 lg:bottom-0 lg:w-[50vw] xl:w-[48vw] flex justify-end">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="w-full lg:col-span-6 lg:absolute lg:right-0 lg:top-12 sm:lg:top-16 lg:top-20 lg:bottom-0 lg:w-[50vw] xl:w-[48vw] flex justify-end"
+          >
             <div className="relative w-full h-[320px] sm:h-[450px] lg:h-full lg:min-h-[680px] overflow-hidden rounded-2xl lg:rounded-none lg:rounded-tl-[63px] bg-muted shadow-xl">
               <Image
                 src="https://placehold.co/729x680/94a3b8/ffffff/png"
@@ -55,9 +72,9 @@ export default function Banner() {
                 priority
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

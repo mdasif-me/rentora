@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import Image from "next/image";
 import {
   BOTTOM_BANNER_IMAGES,
@@ -12,7 +13,12 @@ import type { WhyChooseProps } from "./types";
 
 export default function WhyChoose({ className }: WhyChooseProps) {
   return (
-    <section
+    <motion.section
+      id="why-choose"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
       className={cn("py-20 lg:py-28 bg-background overflow-hidden", className)}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -26,8 +32,14 @@ export default function WhyChoose({ className }: WhyChooseProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20 lg:mb-24">
-          <div className="lg:col-span-6 flex justify-center lg:justify-start">
-            <div className="relative w-full max-w-141.5 h-85 sm:h-110 lg:h-132 overflow-hidden rounded-2xl bg-muted shadow-md">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="lg:col-span-6 flex justify-center lg:justify-start"
+          >
+            <div className="relative w-full max-w-[566px] h-[340px] sm:h-[440px] lg:h-[528px] overflow-hidden rounded-2xl bg-muted shadow-md">
               <Image
                 src={MAIN_FEATURE_IMAGE.src}
                 alt={MAIN_FEATURE_IMAGE.alt}
@@ -37,14 +49,21 @@ export default function WhyChoose({ className }: WhyChooseProps) {
                 className="w-full h-full object-cover rounded-2xl"
               />
             </div>
-          </div>
+          </motion.div>
 
           <div className="lg:col-span-6 flex flex-col space-y-8 lg:space-y-10">
-            {WHY_CHOOSE_FEATURES.map((feature) => {
+            {WHY_CHOOSE_FEATURES.map((feature, idx) => {
               const Icon = feature.icon;
               return (
-                <div key={feature.id} className="flex items-start gap-5">
-                  <div className="w-13 h-13 shrink-0 rounded-xl bg-zinc-200/80 flex items-center justify-center text-zinc-700 shadow-xs">
+                <motion.div
+                  key={feature.id}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.15 }}
+                  className="flex items-start gap-5"
+                >
+                  <div className="w-[52px] h-[52px] shrink-0 rounded-xl bg-zinc-200/80 flex items-center justify-center text-zinc-700 shadow-xs">
                     <Icon className="w-6 h-6 shrink-0" />
                   </div>
 
@@ -56,17 +75,21 @@ export default function WhyChoose({ className }: WhyChooseProps) {
                       {feature.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 pt-4">
-          {BOTTOM_BANNER_IMAGES.map((img) => (
-            <div
+          {BOTTOM_BANNER_IMAGES.map((img, idx) => (
+            <motion.div
               key={img.id}
-              className="relative w-full h-55 sm:h-75 lg:h-90 overflow-hidden rounded-[10px] bg-muted shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.2 }}
+              className="relative w-full h-[220px] sm:h-[300px] lg:h-[360px] overflow-hidden rounded-[10px] bg-muted shadow-md"
             >
               <Image
                 src={img.src}
@@ -76,10 +99,10 @@ export default function WhyChoose({ className }: WhyChooseProps) {
                 unoptimized
                 className="w-full h-full object-cover rounded-[10px]"
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -1,6 +1,7 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -9,13 +10,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import {
-  RiArrowLeftLine,
-  RiArrowRightLine,
-  RiStarFill,
-} from "@remixicon/react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { RiArrowLeftLine, RiArrowRightLine, RiStarFill } from "@remixicon/react";
+import { motion } from "motion/react";
 import { TESTIMONIALS_DATA, TESTIMONIALS_HEADER } from "./constants";
 import type { TestimonialsProps } from "./types";
 
@@ -35,7 +31,12 @@ export default function Testimonials({ className }: TestimonialsProps) {
   }, [api]);
 
   return (
-    <section
+    <motion.section
+      id="testimonials"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
       className={cn("py-20 lg:py-28 bg-zinc-50/50 overflow-hidden", className)}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -48,17 +49,10 @@ export default function Testimonials({ className }: TestimonialsProps) {
           </p>
         </div>
 
-        <Carousel
-          setApi={setApi}
-          opts={{ loop: true, align: "start" }}
-          className="w-full"
-        >
+        <Carousel setApi={setApi} opts={{ loop: true, align: "start" }} className="w-full">
           <CarouselContent className="-ml-6">
             {TESTIMONIALS_DATA.map((item) => (
-              <CarouselItem
-                key={item.id}
-                className="pl-6 basis-full sm:basis-1/2 lg:basis-1/3"
-              >
+              <CarouselItem key={item.id} className="pl-6 basis-full sm:basis-1/2 lg:basis-1/3">
                 <div className="rounded-2xl bg-zinc-200/80 p-6 flex flex-col justify-between h-full min-h-[230px] border border-zinc-200/60 shadow-xs transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3.5">
@@ -104,22 +98,20 @@ export default function Testimonials({ className }: TestimonialsProps) {
           <div className="mt-12 flex items-center justify-between pt-2">
             {/* Left Pagination Dot Indicators */}
             <div className="flex items-center gap-2">
-              {Array.from({ length: count || TESTIMONIALS_DATA.length }).map(
-                (_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => api?.scrollTo(index)}
-                    className={cn(
-                      "transition-all duration-300 rounded-full",
-                      current === index
-                        ? "w-8 h-2.5 bg-foreground"
-                        : "w-2.5 h-2.5 bg-zinc-300 hover:bg-zinc-400",
-                    )}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ),
-              )}
+              {Array.from({ length: count || TESTIMONIALS_DATA.length }).map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => api?.scrollTo(index)}
+                  className={cn(
+                    "transition-all duration-300 rounded-full",
+                    current === index
+                      ? "w-8 h-2.5 bg-foreground"
+                      : "w-2.5 h-2.5 bg-zinc-300 hover:bg-zinc-400",
+                  )}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
 
             {/* Right Navigation Arrow Buttons */}
@@ -149,6 +141,6 @@ export default function Testimonials({ className }: TestimonialsProps) {
           </div>
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 }
