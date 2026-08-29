@@ -1,7 +1,8 @@
 import Banner from "./components/banner";
 import HowItWorks from "./components/how-work";
-import { PopularDeals } from "./components/popular-deals";
+import PopularDeals from "./components/popular-deals";
 import Search from "./components/search";
+import WhyChoose from "./components/why-choose";
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <Search />
       <HowItWorks />
       <PopularDeals />
+      <WhyChoose />
     </main>
   );
 }
