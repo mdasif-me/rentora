@@ -1,5 +1,6 @@
 import Banner from "./components/banner";
 import HowItWorks from "./components/how-work";
+import { PopularDeals } from "./components/popular-deals";
 import Search from "./components/search";
 
 export default function HomePage() {
@@ -8,6 +9,7 @@ export default function HomePage() {
       <Banner />
       <Search />
       <HowItWorks />
+      <PopularDeals />
     </main>
   );
 }
