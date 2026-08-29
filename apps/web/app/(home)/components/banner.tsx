@@ -45,13 +45,13 @@ export default function Banner() {
       </div>
 
       <div className="mt-8 lg:mt-0 lg:absolute lg:right-0 lg:top-12 sm:lg:top-16 lg:top-20 lg:bottom-0 lg:w-[50vw] xl:w-[48vw] flex justify-end">
-        <div className="relative w-full h-112.5 sm:h-137.5 lg:h-full lg:min-h-170 overflow-hidden rounded-tl-[63px] bg-muted shadow-xl">
+        <div className="relative w-full h-112.5 sm:h-137.5 lg:h-full lg:min-h-170 overflow-hidden lg:rounded-tl-[63px] bg-muted shadow-xl">
           <Image
             src="https://placehold.co/729x680/94a3b8/ffffff/png"
             alt="Fast And Easy Way To Rent A Car"
             width={729}
             height={680}
-            className="w-full h-full object-cover rounded-tl-[63px]"
+            className="w-full h-full object-cover lg:rounded-tl-[63px]"
             priority
           />
         </div>
