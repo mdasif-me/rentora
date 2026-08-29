@@ -6,8 +6,8 @@
   "types": "./src/index.ts",
   "scripts": {
     "dev:web": "pnpm --filter @rentora/web dev",
-    "dev:api": "pnpm --filter @rentora/api start:dev",
-    "dev": "pnpm --parallel --filter @rentora/web --filter @rentora/api dev",
+    "dev:ssr": "pnpm --filter @rentora/ssr start:dev",
+    "dev": "pnpm --parallel --filter @rentora/web --filter @rentora/ssr dev",
     "build": "pnpm --recursive build",
     "lint": "pnpm --recursive lint"
   }
