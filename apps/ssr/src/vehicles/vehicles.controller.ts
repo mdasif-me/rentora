@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import type { Vehicle } from '@rentora/types';
+import { GetVehiclesQueryDto } from './dto/get-vehicles-query.dto.js';
 import { VehiclesService } from './vehicles.service.js';
 
 @Controller('api/vehicles')
@@ -7,11 +8,8 @@ export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
   @Get()
-  async findAll(
-    @Query('category') category?: string,
-    @Query('search') search?: string,
-  ): Promise<Vehicle[]> {
-    return this.vehiclesService.findAll(category, search);
+  async findAll(@Query() query: GetVehiclesQueryDto): Promise<Vehicle[]> {
+    return this.vehiclesService.findAll(query.category, query.search);
   }
 
   @Get(':id')

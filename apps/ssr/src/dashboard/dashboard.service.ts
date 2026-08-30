@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import type {
+  BestSeller as PrismaBestSeller,
+  Transaction as PrismaTransaction,
+} from '@prisma/client';
 import type { BestSeller, DashboardStats, Transaction } from '@rentora/types';
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -15,16 +19,16 @@ export class DashboardService {
 
     return {
       weeklyEarnings: {
-        value: stats?.weeklyEarnings || 0,
-        change: stats?.weeklyEarningsPct || 0,
+        value: stats?.weeklyEarnings ?? 0,
+        change: stats?.weeklyEarningsPct ?? 0,
       },
       totalSales: {
-        value: stats?.totalSales || 0,
-        change: stats?.totalSalesPct || 0,
+        value: stats?.totalSales ?? 0,
+        change: stats?.totalSalesPct ?? 0,
       },
       purchasedGoods: {
-        value: stats?.purchasedGoods || 0,
-        change: stats?.purchasedGoodsPct || 0,
+        value: stats?.purchasedGoods ?? 0,
+        change: stats?.purchasedGoodsPct ?? 0,
       },
       bestSellers,
       recentTransactions,
@@ -34,12 +38,11 @@ export class DashboardService {
   }
 
   async getTransactions(): Promise<Transaction[]> {
-    const tx = await this.prisma.transaction.findMany({
+    const tx: PrismaTransaction[] = await this.prisma.transaction.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
     });
-    // map the Prisma type to Transaction which expects date as string and status as specific literal
-    return tx.map((t: any) => ({
+    return tx.map((t: PrismaTransaction): Transaction => ({
       ...t,
       image: t.image ?? undefined,
       date: t.date.toISOString(),
@@ -48,8 +51,10 @@ export class DashboardService {
   }
 
   async getBestSellers(): Promise<BestSeller[]> {
-    const bestSellers = await this.prisma.bestSeller.findMany({ take: 3 });
-    return bestSellers.map((b: any) => ({
+    const bestSellers: PrismaBestSeller[] = await this.prisma.bestSeller.findMany({
+      take: 3,
+    });
+    return bestSellers.map((b: PrismaBestSeller): BestSeller => ({
       ...b,
       image: b.image ?? undefined,
     }));
