@@ -1,5 +1,5 @@
 {
-  "name": "@rentora/types",
+  "name": "rentora-root",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",
