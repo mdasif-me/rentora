@@ -30,7 +30,7 @@ export class SupabaseService {
 
   async uploadImage(
     file: any,
-    bucket: string = 'vehicles',
+    bucket: string = 'assets',
   ): Promise<string | null> {
     if (!file) return null;
 
