@@ -3,7 +3,10 @@ import type { Vehicle } from '@rentora/types';
 import { AiService } from './ai.service.js';
 import { RecommendVehiclesDto } from './dto/recommend-vehicles.dto.js';
 
-@Controller('api/ai')
+@Controller({
+  path: 'ai',
+  version: '1',
+})
 export class AiController {
   constructor(private readonly aiService: AiService) {}
 

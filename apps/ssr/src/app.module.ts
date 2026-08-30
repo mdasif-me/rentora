@@ -1,10 +1,14 @@
+// NestJS application module
+// Registers all feature modules and the VersionModule for API version endpoint.
+
 import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { createObserveModule } from '@nestjs/observe';
+
 import { AiModule } from './ai/ai.module.js';
+import { AutomationModule } from './automation/automation.module.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
-import { AutomationModule } from './automation/automation.module.js';
 import { DashboardModule } from './dashboard/dashboard.module.js';
 import { LeadsModule } from './leads/leads.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
@@ -39,6 +43,7 @@ const isObserveEnabled = Boolean(
     LeadsModule,
     AiModule,
     AutomationModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

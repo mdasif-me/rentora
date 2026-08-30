@@ -3,7 +3,10 @@ import type { Lead } from '@rentora/types';
 import { CreateLeadDto } from './dto/create-lead.dto.js';
 import { LeadsService } from './leads.service.js';
 
-@Controller('api/leads')
+@Controller({
+  path: 'leads',
+  version: '1',
+})
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 

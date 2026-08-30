@@ -2,7 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 import type { BestSeller, DashboardStats, Transaction } from '@rentora/types';
 import { DashboardService } from './dashboard.service.js';
 
-@Controller('api/dashboard')
+@Controller({
+  path: 'dashboard',
+  version: '1',
+})
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 

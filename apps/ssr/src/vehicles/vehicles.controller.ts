@@ -3,7 +3,10 @@ import type { Vehicle } from '@rentora/types';
 import { GetVehiclesQueryDto } from './dto/get-vehicles-query.dto.js';
 import { VehiclesService } from './vehicles.service.js';
 
-@Controller('api/vehicles')
+@Controller({
+  path: 'vehicles',
+  version: '1',
+})
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
