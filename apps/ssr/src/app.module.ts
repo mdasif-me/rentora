@@ -12,13 +12,26 @@ import { VehiclesModule } from './vehicles/vehicles.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
+const observeKey = process.env.OBSERVE_APP_KEY;
+const observeSecret = process.env.OBSERVE_APP_SECRET;
+const isObserveEnabled = Boolean(
+  observeKey &&
+    observeSecret &&
+    observeKey !== 'YOUR_APP_KEY' &&
+    observeSecret !== 'YOUR_APP_SECRET',
+);
+
 @Module({
   imports: [
-    ObserveModule.forRoot({
-      appKey: 'YOUR_APP_KEY',
-      appSecret: 'YOUR_APP_SECRET',
-      serviceId: 'ssr',
-    }),
+    ...(isObserveEnabled
+      ? [
+          ObserveModule.forRoot({
+            appKey: observeKey!,
+            appSecret: observeSecret!,
+            serviceId: 'ssr',
+          }),
+        ]
+      : []),
     EventEmitterModule.forRoot(),
     PrismaModule,
     VehiclesModule,

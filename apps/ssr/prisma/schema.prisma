@@ -85,3 +85,13 @@ model SalesByCountry {
   value   Float
 }
 
+model AiQueryCache {
+  id          String   @id @default(uuid())
+  promptKey   String   @unique
+  explanation String
+  vehicleIds  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([promptKey])
+}
