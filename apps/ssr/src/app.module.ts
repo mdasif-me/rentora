@@ -11,6 +11,7 @@ import { LeadsModule } from './leads/leads.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { SupabaseModule } from './supabase/supabase.module.js';
 import { VehiclesModule } from './vehicles/vehicles.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -42,6 +43,7 @@ const isObserveEnabled = Boolean(
     AiModule,
     AutomationModule,
     SupabaseModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

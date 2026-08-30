@@ -15,7 +15,9 @@ export class VehiclesService {
     const where: Prisma.VehicleWhereInput = {};
 
     if (category) {
-      where.category = { equals: category, mode: 'insensitive' };
+      where.category = {
+        name: { equals: category, mode: 'insensitive' },
+      };
     }
 
     if (searchTerm) {
@@ -25,19 +27,32 @@ export class VehiclesService {
       ];
     }
 
-    const vehicles: PrismaVehicle[] = await this.prisma.vehicle.findMany({
+    const vehicles = await this.prisma.vehicle.findMany({
       where,
+      include: { category: true },
     });
-    return vehicles.map((v: PrismaVehicle): Vehicle => ({
+    return vehicles.map((v): Vehicle => ({
       ...v,
       image: v.image ?? undefined,
       transmission: v.transmission as 'Auto' | 'Manual',
+      category: v.category
+        ? {
+            id: v.category.id,
+            name: v.category.name,
+            slug: v.category.slug,
+            isActive: v.category.isActive,
+            order: v.category.order,
+            image: v.category.image ?? undefined,
+            description: v.category.description ?? undefined,
+          }
+        : undefined,
     }));
   }
 
   async findOne(id: string): Promise<Vehicle> {
-    const vehicle: PrismaVehicle | null = await this.prisma.vehicle.findUnique({
+    const vehicle = await this.prisma.vehicle.findUnique({
       where: { id },
+      include: { category: true },
     });
     if (!vehicle) {
       throw new NotFoundException(`Vehicle with ID ${id} not found`);
@@ -46,10 +61,24 @@ export class VehiclesService {
       ...vehicle,
       image: vehicle.image ?? undefined,
       transmission: vehicle.transmission as 'Auto' | 'Manual',
+      category: vehicle.category
+        ? {
+            id: vehicle.category.id,
+            name: vehicle.category.name,
+            slug: vehicle.category.slug,
+            isActive: vehicle.category.isActive,
+            order: vehicle.category.order,
+            image: vehicle.category.image ?? undefined,
+            description: vehicle.category.description ?? undefined,
+          }
+        : undefined,
     };
   }
 
-  async create(data: Prisma.VehicleCreateInput, file?: any): Promise<Vehicle> {
+  async create(
+    data: Prisma.VehicleUncheckedCreateInput,
+    file?: any,
+  ): Promise<Vehicle> {
     let imageUrl: string | undefined;
 
     if (file) {
@@ -64,12 +93,24 @@ export class VehiclesService {
         ...data,
         image: imageUrl,
       },
+      include: { category: true },
     });
 
     return {
       ...vehicle,
       image: vehicle.image ?? undefined,
       transmission: vehicle.transmission as 'Auto' | 'Manual',
+      category: vehicle.category
+        ? {
+            id: vehicle.category.id,
+            name: vehicle.category.name,
+            slug: vehicle.category.slug,
+            isActive: vehicle.category.isActive,
+            order: vehicle.category.order,
+            image: vehicle.category.image ?? undefined,
+            description: vehicle.category.description ?? undefined,
+          }
+        : undefined,
     };
   }
 }

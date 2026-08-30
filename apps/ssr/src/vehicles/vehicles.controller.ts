@@ -32,10 +32,9 @@ export class VehiclesController {
       type: 'object',
       properties: {
         name: { type: 'string', example: 'Toyota Camry' },
-        category: { type: 'string', example: 'Sedan' },
+        categoryId: { type: 'string', example: 'uuid-of-category' },
         type: { type: 'string', example: 'Standard' },
         pricePerDay: { type: 'number', example: 50 },
-        seats: { type: 'number', example: 5 },
         transmission: { type: 'string', example: 'Auto' },
         fuel: { type: 'string', example: 'Petrol' },
         location: { type: 'string', example: 'New York' },
@@ -49,15 +48,12 @@ export class VehiclesController {
   })
   @UseInterceptors(FileInterceptor('image'))
   async create(
-    @Body() data: Prisma.VehicleCreateInput,
+    @Body() data: Prisma.VehicleUncheckedCreateInput,
     @UploadedFile() file?: any,
   ): Promise<Vehicle> {
-    // Note: In a real app, you should use a proper DTO instead of Prisma.VehicleCreateInput
-    // and parse numeric fields from form-data.
     const vehicleData = {
       ...data,
       pricePerDay: Number(data.pricePerDay),
-      seats: Number(data.seats),
     };
     return this.vehiclesService.create(vehicleData as any, file);
   }

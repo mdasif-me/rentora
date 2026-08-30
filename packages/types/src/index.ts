@@ -1,10 +1,20 @@
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  image?: string;
+  description?: string;
+  isActive: boolean;
+  order: number;
+}
+
 export interface Vehicle {
   id: string;
   name: string;
-  category: string;
+  categoryId: string;
+  category?: Category;
   type: string;
   pricePerDay: number;
-  seats: number;
   transmission: "Auto" | "Manual";
   fuel: string;
   location: string;

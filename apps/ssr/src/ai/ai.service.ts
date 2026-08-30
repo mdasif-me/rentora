@@ -130,7 +130,6 @@ export class AiService {
       type: v.type,
       category: v.category,
       pricePerDay: v.pricePerDay,
-      seats: v.seats,
     }));
     const model = process.env.AI_MODEL ?? 'google/gemini-2.5-flash';
     const response = await fetch(
@@ -188,11 +187,7 @@ export class AiService {
     allVehicles: Vehicle[],
   ): { explanation: string; vehicles: Vehicle[] } {
     let matchedVehicles = [...allVehicles];
-    const seatsMatch = promptLower.match(/(\d+)\s*(people|seats|passengers)/);
-    if (seatsMatch) {
-      const seats = parseInt(seatsMatch[1], 10);
-      matchedVehicles = matchedVehicles.filter((v) => v.seats >= seats);
-    }
+
     if (promptLower.includes('suv')) {
       matchedVehicles = matchedVehicles.filter(
         (v) => v.type.toLowerCase() === 'suv',
@@ -206,7 +201,7 @@ export class AiService {
       promptLower.includes('sedan')
     ) {
       matchedVehicles = matchedVehicles.filter(
-        (v) => v.category.toLowerCase() === 'luxury',
+        (v) => v.category?.name.toLowerCase() === 'luxury',
       );
     }
     const budgetMatch =
