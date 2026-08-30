@@ -21,19 +21,15 @@ import {
   AnimatedSidebarTrigger,
 } from "@/components/motion/animated-sidebar";
 import {
-  Building2,
+  Car,
   ChevronRight,
   ChevronsUpDown,
   CircleUserRound,
   Inbox,
   LayoutGrid,
-  ListTodo,
-  NotebookTabs,
   PanelLeft,
   Search,
   Sparkles,
-  Target,
-  Workflow,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -59,43 +55,19 @@ const destinations: DestinationItem[] = [
     icon: LayoutGrid,
   },
   {
-    label: "Products",
-    href: "/admin/products",
-    icon: Building2,
+    label: "Vehicle",
+    href: "/admin/vehicles",
+    icon: Car,
     children: [
-      { label: "All Products", href: "/admin/products" },
-      { label: "Create Product", href: "/admin/create-product" },
-      { label: "Category", href: "/admin/category" },
+      { label: "All Vehicles", href: "/admin/vehicles" },
+      { label: "Create Vehicle", href: "/admin/vehicles/create" },
+      { label: "Category", href: "/admin/categories" },
     ],
   },
   {
-    label: "Sales",
-    href: "/admin/sales",
-    icon: Target,
-    children: [
-      { label: "All Orders", href: "/admin/sales" },
-      { label: "Invoices", href: "/admin/invoices" },
-      { label: "Quotations", href: "/admin/quotation" },
-    ],
-  },
-  {
-    label: "Manage Stock",
-    href: "/admin/manage-stock",
-    icon: ListTodo,
-  },
-  {
-    label: "Notes",
-    href: "/admin/notes",
-    icon: NotebookTabs,
-  },
-  {
-    label: "Workflows",
-    href: "/admin/workflows",
-    icon: Workflow,
-    children: [
-      { label: "Automations", href: "/admin/automations" },
-      { label: "Runs", href: "/admin/runs" },
-    ],
+    label: "Leads",
+    href: "/admin/leads",
+    icon: Inbox,
   },
 ];
 
@@ -109,12 +81,12 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   return (
-    <div className="w-full min-h-screen bg-background">
-      <AnimatedSidebarProvider className="min-h-screen border-none bg-background">
+    <div className="flex h-screen w-full bg-background overflow-hidden">
+      <AnimatedSidebarProvider className="h-screen border-none bg-background overflow-hidden">
         <AnimatedSidebar
           ariaLabel="Rentora workspace"
           collapsible="icon"
-          className="min-h-screen"
+          className="h-screen"
           panelClassName="h-full border-foreground/[0.08]"
         >
           <AnimatedSidebarHeader className="p-3 pb-2">
@@ -124,7 +96,7 @@ export default function AdminLayout({
               </div>
               <button
                 type="button"
-                className="flex min-w-0 flex-1 items-center gap-2 rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-ring group-data-[state=collapsed]/sidebar:hidden"
+                className="flex min-h-0 flex-1 items-center gap-2 rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-ring group-data-[state=collapsed]/sidebar:hidden"
               >
                 <span className="truncate text-sm font-semibold text-foreground">
                   Rentora Inc
@@ -158,15 +130,6 @@ export default function AdminLayout({
                       onSelect={() => setActive("AI Assistant")}
                     >
                       AI Assistant
-                    </AnimatedSidebarMenuButton>
-                  </AnimatedSidebarMenuItem>
-                  <AnimatedSidebarMenuItem>
-                    <AnimatedSidebarMenuButton
-                      icon={<Inbox className="size-4" />}
-                      badge="4"
-                      onSelect={() => setActive("Inbox")}
-                    >
-                      Inbox
                     </AnimatedSidebarMenuButton>
                   </AnimatedSidebarMenuItem>
                 </AnimatedSidebarMenu>
@@ -240,14 +203,14 @@ export default function AdminLayout({
               className="flex min-h-11 w-full items-center gap-3 overflow-hidden rounded-xl p-1 text-left outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#d5ff66] text-xs font-semibold text-[#172000]">
-                MW
+                R
               </span>
               <span className="min-w-0 flex-1 group-data-[state=collapsed]/sidebar:hidden">
                 <span className="block truncate text-sm font-medium text-foreground">
-                  Mike Witzel
+                  Admin
                 </span>
                 <span className="block truncate text-xs text-muted-foreground">
-                  mike@rentora.com
+                  admin@rentora.com
                 </span>
               </span>
               <ChevronRight
@@ -260,8 +223,8 @@ export default function AdminLayout({
           <AnimatedSidebarRail />
         </AnimatedSidebar>
 
-        <AnimatedSidebarInset className="min-h-screen bg-background flex flex-col justify-between">
-          <header className="flex h-16 shrink-0 items-center gap-3 border-border border-b px-4">
+        <AnimatedSidebarInset className="h-screen bg-background flex flex-col justify-between overflow-y-auto">
+          <header className="flex h-16 shrink-0 items-center gap-3 border-border border-b px-4 sticky top-0 bg-background z-10">
             <AnimatedSidebarTrigger className="text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <PanelLeft aria-hidden="true" className="size-4" />
             </AnimatedSidebarTrigger>

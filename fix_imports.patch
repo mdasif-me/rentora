@@ -1,0 +1,13 @@
+--- apps/web/app/admin/components/chart-interactive.tsx
++++ apps/web/app/admin/components/chart-interactive.tsx
+@@ -15,7 +15,7 @@
+   ChartLegendContent,
+   ChartTooltip,
+   ChartTooltipContent,
+-import { CHART_DATA, CHART_CONFIG } from "./dashboard.constants"
++} from "@/components/ui/chart"
+ 
+-export function ChartAreaInteractive() {
++import { CHART_DATA, CHART_CONFIG } from "./dashboard.constants"
+ 
++export function ChartAreaInteractive() {
