@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
@@ -25,6 +25,11 @@ export class CreateCategoryDto {
   @ApiPropertyOptional({
     example: true,
     description: 'Whether the category is active and visible',
+  })
+  @Transform(({ value }) => {
+    if (value === 'true' || value === true) return true;
+    if (value === 'false' || value === false) return false;
+    return value;
   })
   @IsBoolean()
   @IsOptional()

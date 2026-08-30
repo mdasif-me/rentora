@@ -72,4 +72,57 @@ export class CategoriesService {
       description: category.description ?? undefined,
     };
   }
+
+  async update(id: string, data: any, file?: any): Promise<Category> {
+    const existing = await this.prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    }
+
+    let imageUrl: string | undefined = existing.image ?? undefined;
+
+    if (file) {
+      const uploadedUrl = await this.supabaseService.uploadImage(
+        file,
+        'assets',
+      );
+      if (uploadedUrl) imageUrl = uploadedUrl;
+    }
+
+    const slug = data.name
+      ? data.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '')
+      : existing.slug;
+
+    const category = await this.prisma.category.update({
+      where: { id },
+      data: {
+        ...(data.name !== undefined && { name: data.name, slug }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
+        ...(data.isActive !== undefined && {
+          isActive: String(data.isActive) === 'true',
+        }),
+        ...(data.order !== undefined && { order: Number(data.order) }),
+        image: imageUrl,
+      },
+    });
+
+    return {
+      ...category,
+      image: category.image ?? undefined,
+      description: category.description ?? undefined,
+    };
+  }
+
+  async delete(id: string): Promise<void> {
+    const existing = await this.prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    }
+    await this.prisma.category.delete({ where: { id } });
+  }
 }

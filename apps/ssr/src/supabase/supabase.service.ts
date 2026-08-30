@@ -24,6 +24,42 @@ export class SupabaseService {
     );
   }
 
+  private verifiedBuckets = new Set<string>();
+
+  private async ensureBucketIsPublic(bucket: string) {
+    if (this.verifiedBuckets.has(bucket)) return;
+
+    try {
+      const { data: bucketInfo, error: getError } = await this.supabase.storage.getBucket(bucket);
+
+      if (getError) {
+        // If the bucket doesn't exist, create it as public
+        const { error: createError } = await this.supabase.storage.createBucket(bucket, {
+          public: true,
+        });
+        if (createError) {
+          this.logger.error(`Failed to create bucket ${bucket}:`, createError);
+        } else {
+          this.verifiedBuckets.add(bucket);
+        }
+      } else if (bucketInfo && !bucketInfo.public) {
+        // If it exists but is private, update it to public
+        const { error: updateError } = await this.supabase.storage.updateBucket(bucket, {
+          public: true,
+        });
+        if (updateError) {
+          this.logger.error(`Failed to update bucket ${bucket} to public:`, updateError);
+        } else {
+          this.verifiedBuckets.add(bucket);
+        }
+      } else {
+        this.verifiedBuckets.add(bucket);
+      }
+    } catch (err) {
+      this.logger.error(`Failed to verify bucket ${bucket}:`, err);
+    }
+  }
+
   getClient(): SupabaseClient {
     return this.supabase;
   }
@@ -39,6 +75,9 @@ export class SupabaseService {
         'Supabase credentials are not configured. Cannot upload image.',
       );
     }
+
+    // Ensure the bucket exists and is public before uploading
+    await this.ensureBucketIsPublic(bucket);
 
     try {
       const fileExt = file.originalname.split('.').pop();

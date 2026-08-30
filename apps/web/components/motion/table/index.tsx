@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 // beui.dev/components/motion/table
 
+import { Checkbox } from "@/components/motion/checkbox";
+import { cn } from "@/lib/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Checkbox } from "@/components/motion/checkbox";
-import { cn } from "@/lib/utils";
 import { EditableCell } from "./editable-cell";
 import { RowHandle } from "./row-handle";
 import { SkeletonRows } from "./skeleton-rows";
@@ -108,7 +109,7 @@ export function Table<T>({
 
   const rows = useMemo(
     () =>
-      data.map((row, index) => ({
+      (Array.isArray(data) ? data : []).map((row, index) => ({
         row,
         id: getRowId ? getRowId(row, index) : String(index),
       })),
@@ -183,18 +184,21 @@ export function Table<T>({
     // sizes the column.
     const inputOnly = (column: (typeof orderedColumns)[number]) =>
       Boolean(onColumnRename) || (!column.cell && Boolean(column.editable));
-    const total = orderedColumns.reduce((sum, column) => {
-      const resized = widths[column.key];
-      if (resized != null) return sum + resized;
-      const declared = resolveColumnWidth(column.width, rootFontSize);
-      if (declared != null) return sum + declared;
-      return (
-        sum +
-        (inputOnly(column)
-          ? Math.max(minColumnWidth, INPUT_COLUMN_WIDTH)
-          : minColumnWidth)
-      );
-    }, selectable ? CHECKBOX_PX : 0);
+    const total = orderedColumns.reduce(
+      (sum, column) => {
+        const resized = widths[column.key];
+        if (resized != null) return sum + resized;
+        const declared = resolveColumnWidth(column.width, rootFontSize);
+        if (declared != null) return sum + declared;
+        return (
+          sum +
+          (inputOnly(column)
+            ? Math.max(minColumnWidth, INPUT_COLUMN_WIDTH)
+            : minColumnWidth)
+        );
+      },
+      selectable ? CHECKBOX_PX : 0,
+    );
     return Math.round(total);
   }, [
     minColumnWidth,
@@ -234,9 +238,10 @@ export function Table<T>({
   }, []);
 
   const rowRefs = useRef<Record<string, HTMLTableRowElement | null>>({});
-  const [activeRow, setActiveRow] = useState<{ id: string; index: number } | null>(
-    null,
-  );
+  const [activeRow, setActiveRow] = useState<{
+    id: string;
+    index: number;
+  } | null>(null);
   const rowTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activateRow = useCallback((id: string, index: number) => {
     if (rowTimer.current) clearTimeout(rowTimer.current);
