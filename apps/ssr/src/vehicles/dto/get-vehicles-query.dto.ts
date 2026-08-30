@@ -17,4 +17,12 @@ export class GetVehiclesQueryDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by vehicle location',
+    example: 'New York',
+  })
+  @IsOptional()
+  @IsString()
+  location?: string;
 }

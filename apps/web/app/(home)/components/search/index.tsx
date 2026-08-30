@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { format } from "date-fns";
 import { Checkbox } from "@/components/motion/checkbox";
 import {
   Popover,
@@ -18,12 +16,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { LOCATION_OPTIONS, PLACEHOLDERS, TIME_OPTIONS } from "./constants";
 import type { SearchProps } from "./types";
 
-export default function Search({ onSearch, className }: SearchProps) {
+export default function Search({
+  onSearch,
+  className,
+  locations,
+}: SearchProps) {
+  const router = useRouter();
   const [pickupEnabled, setPickupEnabled] = useState<boolean>(true);
   const [dropoffEnabled, setDropoffEnabled] = useState<boolean>(true);
+
+  const locationsList =
+    locations && locations.length > 0 ? locations : LOCATION_OPTIONS;
 
   const [pickupCity, setPickupCity] = useState<string>("");
   const [pickupDate, setPickupDate] = useState<Date | undefined>(undefined);
@@ -35,14 +44,34 @@ export default function Search({ onSearch, className }: SearchProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch?.({
+    const searchParams = {
       pickupCity: pickupEnabled ? pickupCity : "",
       pickupDate: pickupEnabled ? pickupDate : undefined,
       pickupTime: pickupEnabled ? pickupTime : "",
       dropoffCity: dropoffEnabled ? dropoffCity : "",
       dropoffDate: dropoffEnabled ? dropoffDate : undefined,
       dropoffTime: dropoffEnabled ? dropoffTime : "",
-    });
+    };
+
+    if (onSearch) {
+      onSearch(searchParams);
+    } else {
+      const params = new URLSearchParams();
+      if (searchParams.pickupCity)
+        params.set("location", searchParams.pickupCity);
+      if (searchParams.pickupDate)
+        params.set("pickupDate", searchParams.pickupDate.toISOString());
+      if (searchParams.pickupTime)
+        params.set("pickupTime", searchParams.pickupTime);
+      if (searchParams.dropoffCity)
+        params.set("dropoffCity", searchParams.dropoffCity);
+      if (searchParams.dropoffDate)
+        params.set("dropoffDate", searchParams.dropoffDate.toISOString());
+      if (searchParams.dropoffTime)
+        params.set("dropoffTime", searchParams.dropoffTime);
+
+      router.push(`/search?${params.toString()}`);
+    }
   };
 
   return (
@@ -93,7 +122,7 @@ export default function Search({ onSearch, className }: SearchProps) {
                       <SelectValue placeholder={PLACEHOLDERS.city} />
                     </SelectTrigger>
                     <SelectContent>
-                      {LOCATION_OPTIONS.map((loc) => (
+                      {locationsList.map((loc) => (
                         <SelectItem key={loc.id} value={loc.value}>
                           {loc.label}
                         </SelectItem>
@@ -203,7 +232,7 @@ export default function Search({ onSearch, className }: SearchProps) {
                       <SelectValue placeholder={PLACEHOLDERS.city} />
                     </SelectTrigger>
                     <SelectContent>
-                      {LOCATION_OPTIONS.map((loc) => (
+                      {locationsList.map((loc) => (
                         <SelectItem key={loc.id} value={loc.value}>
                           {loc.label}
                         </SelectItem>

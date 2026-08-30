@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, Vehicle as PrismaVehicle } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import type { Vehicle } from '@rentora/types';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { SupabaseService } from '../supabase/supabase.service.js';
@@ -11,12 +11,20 @@ export class VehiclesService {
     private readonly supabaseService: SupabaseService,
   ) {}
 
-  async findAll(category?: string, searchTerm?: string): Promise<Vehicle[]> {
+  async findAll(
+    category?: string,
+    searchTerm?: string,
+    location?: string,
+  ): Promise<Vehicle[]> {
     const where: Prisma.VehicleWhereInput = {};
 
     if (category) {
       where.category = {
-        name: { equals: category, mode: 'insensitive' },
+        OR: [
+          { id: category },
+          { name: { equals: category, mode: 'insensitive' } },
+          { slug: { equals: category, mode: 'insensitive' } },
+        ],
       };
     }
 
@@ -25,6 +33,10 @@ export class VehiclesService {
         { name: { contains: searchTerm, mode: 'insensitive' } },
         { type: { contains: searchTerm, mode: 'insensitive' } },
       ];
+    }
+
+    if (location) {
+      where.location = { contains: location, mode: 'insensitive' };
     }
 
     const vehicles = await this.prisma.vehicle.findMany({

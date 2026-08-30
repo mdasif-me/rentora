@@ -22,4 +22,5 @@ export interface SearchParams {
 export interface SearchProps {
   readonly onSearch?: (params: SearchParams) => void;
   readonly className?: string;
+  readonly locations?: LocationOption[];
 }

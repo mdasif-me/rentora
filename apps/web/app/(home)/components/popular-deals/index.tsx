@@ -10,22 +10,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import {
-  CATEGORY_VEHICLES_MAP,
-  POPULAR_DEALS_CATEGORIES,
-  POPULAR_DEALS_HEADER,
-  TOTAL_VEHICLES_COUNT,
-} from "./constants";
+import { useState } from "react";
 import type { PopularDealsProps } from "./types";
+import { POPULAR_DEALS_HEADER } from "./constants";
 
 export default function PopularDeals({
+  initialCategories = [],
+  initialVehicles = [],
   className,
-  onShowMoreCars,
   onRentNow,
 }: PopularDealsProps) {
+  // Construct dynamic category tabs: "Popular" (all) + DB categories
+  const categoriesList = [
+    { id: "all", label: "Popular", value: "popular" },
+    ...initialCategories.map((c) => ({
+      id: c.id,
+      label: c.name,
+      value: c.id,
+    })),
+  ];
+
+  // Pagination state (visible cars limit)
+  const [visibleLimit, setVisibleLimit] = useState(8);
+
   const handleShowMoreClick = () => {
-    // TODO: Implement show more car pagination / API integration for dynamic vehicle loading
-    onShowMoreCars?.();
+    setVisibleLimit((prev) => prev + 8);
   };
 
   return (
@@ -38,6 +47,7 @@ export default function PopularDeals({
       className={cn("py-20 lg:py-28 bg-muted overflow-hidden", className)}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-foreground">
             {POPULAR_DEALS_HEADER.title}
@@ -48,9 +58,10 @@ export default function PopularDeals({
         </div>
 
         <Tabs defaultValue="popular" variant="underline">
+          {/* Scrollable Tabs Header */}
           <div className="border-b border-zinc-200 mb-10 overflow-x-auto scrollbar-none">
             <TabsList className="w-full justify-around sm:justify-start gap-6 sm:gap-16 border-b-0 pb-0 bg-transparent">
-              {POPULAR_DEALS_CATEGORIES.map((cat) => (
+              {categoriesList.map((cat) => (
                 <TabsTrigger
                   key={cat.id}
                   value={cat.value}
@@ -63,44 +74,79 @@ export default function PopularDeals({
             </TabsList>
           </div>
 
-          {POPULAR_DEALS_CATEGORIES.map((cat) => {
-            const vehicles = CATEGORY_VEHICLES_MAP[cat.value] ?? [];
+          {/* Tabs Content */}
+          {categoriesList.map((cat) => {
+            // Filter vehicles belonging to this category
+            const filteredVehicles = cat.value === "popular"
+              ? initialVehicles
+              : initialVehicles.filter((v) => v.categoryId === cat.value);
+
+            // Paginated slice
+            const displayedVehicles = filteredVehicles.slice(0, visibleLimit);
+            const hasMore = filteredVehicles.length > visibleLimit;
+
             return (
               <TabsContent key={cat.id} value={cat.value} className="mt-0">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {vehicles.map((vehicle, idx) => (
-                    <motion.div
-                      key={vehicle.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: idx * 0.05 }}
-                    >
-                      <AppCard vehicle={vehicle} onRentNow={onRentNow} />
-                    </motion.div>
-                  ))}
-                </div>
+                {displayedVehicles.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {displayedVehicles.map((vehicle, idx) => {
+                      // Map Vehicle -> AppCardData format
+                      const cardData = {
+                        id: vehicle.id,
+                        name: vehicle.name,
+                        image: vehicle.image || "https://placehold.co/304x388/8d99ae/white.png",
+                        price: Number(vehicle.pricePerDay),
+                        priceUnit: "day",
+                        category: vehicle.category?.name || "",
+                      };
+
+                      return (
+                        <motion.div
+                          key={vehicle.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: idx * 0.05 }}
+                        >
+                          <AppCard vehicle={cardData} onRentNow={onRentNow} />
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <p className="text-zinc-500 font-medium">No vehicles found in this category.</p>
+                  </div>
+                )}
+
+                {/* Bottom Pagination Bar inside each tab */}
+                {filteredVehicles.length > 0 && (
+                  <div className="relative mt-12 sm:mt-16 flex items-center justify-center">
+                    {hasMore ? (
+                      <Button
+                        type="button"
+                        variant="default"
+                        size="lg"
+                        onClick={handleShowMoreClick}
+                        className="bg-white text-foreground hover:bg-zinc-100 shadow-sm border border-zinc-200 font-medium px-8 py-3 text-sm"
+                      >
+                        Show more cars
+                      </Button>
+                    ) : (
+                      <p className="text-xs sm:text-sm text-muted-foreground/80 font-medium">
+                        Showing all {filteredVehicles.length} cars
+                      </p>
+                    )}
+
+                    <div className="absolute right-0 text-xs sm:text-sm text-muted-foreground font-medium hidden sm:block">
+                      Total: {filteredVehicles.length} {filteredVehicles.length === 1 ? "Car" : "Cars"}
+                    </div>
+                  </div>
+                )}
               </TabsContent>
             );
           })}
         </Tabs>
-
-        {/* Bottom Pagination Bar */}
-        <div className="relative mt-12 sm:mt-16 flex items-center justify-center">
-          <Button
-            type="button"
-            variant="default"
-            size="lg"
-            onClick={handleShowMoreClick}
-            className="bg-white text-foreground hover:bg-zinc-100 shadow-sm border border-zinc-200 font-medium px-8 py-3 text-sm"
-          >
-            Show more car
-          </Button>
-
-          <div className="absolute right-0 text-xs sm:text-sm text-muted-foreground font-medium hidden sm:block">
-            {TOTAL_VEHICLES_COUNT} Car
-          </div>
-        </div>
       </div>
     </motion.section>
   );

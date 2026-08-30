@@ -61,7 +61,11 @@ export class VehiclesController {
   @Get()
   @ApiOperation({ summary: 'Get all vehicles with optional filters' })
   async findAll(@Query() query: GetVehiclesQueryDto): Promise<Vehicle[]> {
-    return this.vehiclesService.findAll(query.category, query.search);
+    return this.vehiclesService.findAll(
+      query.category,
+      query.search,
+      query.location,
+    );
   }
 
   @Get(':id')
