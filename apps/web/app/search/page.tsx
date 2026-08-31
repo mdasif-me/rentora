@@ -146,26 +146,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         {/* Vehicles Grid */}
         {vehicles.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {vehicles.map((vehicle) => {
-              const cardData = {
-                id: vehicle.id,
-                name: vehicle.name,
-                image:
-                  vehicle.image ||
-                  "https://placehold.co/304x388/8d99ae/white.png",
-                price: Number(vehicle.pricePerDay),
-                priceUnit: "day",
-                category: vehicle.category?.name || "",
-              };
-
-              return (
-                <div key={vehicle.id}>
-                  <AppCard vehicle={cardData} />
-                </div>
-              );
-            })}
-          </div>
+          <VehiclesGrid vehicles={vehicles} />
         ) : (
           <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-zinc-200 p-8 text-center max-w-xl mx-auto shadow-sm">
             <div className="h-12 w-12 rounded-full bg-orange-50 flex items-center justify-center mb-4">

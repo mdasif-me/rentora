@@ -1,6 +1,7 @@
 "use client";
 
 import { AppCard } from "@/components/container/cards";
+import BookingModal from "@/components/customer/booking-modal";
 import {
   Tabs,
   TabsContent,
@@ -9,10 +10,11 @@ import {
 } from "@/components/motion/tabs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { Vehicle } from "@rentora/types";
 import { motion } from "motion/react";
 import { useState } from "react";
-import type { PopularDealsProps } from "./types";
 import { POPULAR_DEALS_HEADER } from "./constants";
+import type { PopularDealsProps } from "./types";
 
 export default function PopularDeals({
   initialCategories = [],
@@ -32,9 +34,21 @@ export default function PopularDeals({
 
   // Pagination state (visible cars limit)
   const [visibleLimit, setVisibleLimit] = useState(8);
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
 
   const handleShowMoreClick = () => {
     setVisibleLimit((prev) => prev + 8);
+  };
+
+  const handleRentClick = (vehicleId: string) => {
+    if (onRentNow) {
+      onRentNow(vehicleId);
+      return;
+    }
+    const vehicle = initialVehicles.find((v) => v.id === vehicleId);
+    if (vehicle) {
+      setSelectedVehicle(vehicle);
+    }
   };
 
   return (
@@ -60,12 +74,12 @@ export default function PopularDeals({
         <Tabs defaultValue="popular" variant="underline">
           {/* Scrollable Tabs Header */}
           <div className="border-b border-zinc-200 mb-10 overflow-x-auto scrollbar-none">
-            <TabsList className="w-full justify-around sm:justify-start gap-6 sm:gap-16 border-b-0 pb-0 bg-transparent">
+            <TabsList className="flex flex-nowrap min-w-full justify-start gap-4 sm:gap-12 border-b-0 pb-0 bg-transparent">
               {categoriesList.map((cat) => (
                 <TabsTrigger
                   key={cat.id}
                   value={cat.value}
-                  className="text-base sm:text-lg font-bold py-3 px-2 sm:px-4"
+                  className="text-base sm:text-lg font-bold py-3 px-2 sm:px-4 whitespace-nowrap shrink-0"
                   indicatorClassName="h-[3px] bg-zinc-900 rounded-full"
                 >
                   {cat.label}
@@ -77,9 +91,10 @@ export default function PopularDeals({
           {/* Tabs Content */}
           {categoriesList.map((cat) => {
             // Filter vehicles belonging to this category
-            const filteredVehicles = cat.value === "popular"
-              ? initialVehicles
-              : initialVehicles.filter((v) => v.categoryId === cat.value);
+            const filteredVehicles =
+              cat.value === "popular"
+                ? initialVehicles
+                : initialVehicles.filter((v) => v.categoryId === cat.value);
 
             // Paginated slice
             const displayedVehicles = filteredVehicles.slice(0, visibleLimit);
@@ -94,7 +109,9 @@ export default function PopularDeals({
                       const cardData = {
                         id: vehicle.id,
                         name: vehicle.name,
-                        image: vehicle.image || "https://placehold.co/304x388/8d99ae/white.png",
+                        image:
+                          vehicle.image ||
+                          "https://placehold.co/304x388/8d99ae/white.png",
                         price: Number(vehicle.pricePerDay),
                         priceUnit: "day",
                         category: vehicle.category?.name || "",
@@ -108,14 +125,19 @@ export default function PopularDeals({
                           viewport={{ once: true }}
                           transition={{ duration: 0.4, delay: idx * 0.05 }}
                         >
-                          <AppCard vehicle={cardData} onRentNow={onRentNow} />
+                          <AppCard
+                            vehicle={cardData}
+                            onRentNow={handleRentClick}
+                          />
                         </motion.div>
                       );
                     })}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <p className="text-zinc-500 font-medium">No vehicles found in this category.</p>
+                    <p className="text-zinc-500 font-medium">
+                      No vehicles found in this category.
+                    </p>
                   </div>
                 )}
 
@@ -139,7 +161,8 @@ export default function PopularDeals({
                     )}
 
                     <div className="absolute right-0 text-xs sm:text-sm text-muted-foreground font-medium hidden sm:block">
-                      Total: {filteredVehicles.length} {filteredVehicles.length === 1 ? "Car" : "Cars"}
+                      Total: {filteredVehicles.length}{" "}
+                      {filteredVehicles.length === 1 ? "Car" : "Cars"}
                     </div>
                   </div>
                 )}
@@ -148,6 +171,12 @@ export default function PopularDeals({
           })}
         </Tabs>
       </div>
+
+      <BookingModal
+        vehicle={selectedVehicle}
+        isOpen={selectedVehicle !== null}
+        onClose={() => setSelectedVehicle(null)}
+      />
     </motion.section>
   );
 }
