@@ -81,7 +81,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <main className="flex-1 py-12 bg-zinc-50 min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
-        {/* Back and Header */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link href="/">
@@ -127,7 +127,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
         </div>
 
-        {/* AI Explanation Banner */}
+        {}
         {aiPrompt && aiExplanation && (
           <div className="p-5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-100 flex gap-4 shadow-sm">
             <div className="h-10 w-10 shrink-0 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
@@ -144,7 +144,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
         )}
 
-        {/* Vehicles Grid */}
+        {}
         {vehicles.length > 0 ? (
           <VehiclesGrid vehicles={vehicles} />
         ) : (

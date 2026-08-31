@@ -42,17 +42,14 @@ function useCenterMorphModalContext(component: string) {
 
 export interface CenterMorphModalProps {
   children: ReactNode;
-  /** Controlled open state. */
+  
   open?: boolean;
-  /** Initial state when used uncontrolled. */
+  
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
-/**
- * A modal whose full-size surface unfolds outward from its exact center.
- * Supports controlled and uncontrolled state through composable primitives.
- */
+
 export function CenterMorphModal({
   children,
   open: controlledOpen,
@@ -93,7 +90,7 @@ export interface CenterMorphModalTriggerProps {
   children: ReactElement;
 }
 
-/** Wraps one interactive element and opens or closes the modal. */
+
 export function CenterMorphModalTrigger({
   children,
 }: CenterMorphModalTriggerProps) {
@@ -121,7 +118,7 @@ export interface CenterMorphModalCloseProps {
   children: ReactElement;
 }
 
-/** Wraps one interactive element and closes the modal. */
+
 export function CenterMorphModalClose({
   children,
 }: CenterMorphModalCloseProps) {
@@ -143,13 +140,13 @@ export function CenterMorphModalClose({
 
 export interface CenterMorphModalContentProps {
   children: ReactNode;
-  /** Accessible name announced by screen readers. */
+  
   ariaLabel: string;
-  /** Optional id of descriptive content inside the modal. */
+  
   ariaDescribedBy?: string;
-  /** Close on Escape or backdrop press. Default true. */
+  
   dismissible?: boolean;
-  /** Render the close control inside the panel's top-right corner. Default true. */
+  
   showCloseButton?: boolean;
   closeButtonLabel?: string;
   className?: string;
@@ -168,9 +165,9 @@ const FOCUSABLE_SELECTOR = [
 const CENTER_FOLDED_CLIP = "inset(48% 48% 48% 48% round 30px)";
 const CENTER_OPEN_CLIP = "inset(0% 0% 0% 0% round 30px)";
 
-// Complex clip-path strings can snap when a spring resolves its final distance.
-// Keep the radius constant so the whole duration reads as surface unfolding,
-// rather than finishing early and spending its last frames rounding corners.
+
+
+
 const CENTER_UNFOLD_EASE = [0.2, 0, 0.2, 1] as const;
 const CENTER_UNFOLD_TRANSITION = {
   duration: 0.43,
@@ -284,16 +281,12 @@ export function CenterMorphModalContent({
                 )}
               />
 
-              {/* `inset-4` rather than `inset-0 p-4`: same content box, but the
-                  layer stays off the viewport edges. It never takes pointer
-                  events, so it carries `inert` alone. See
-                  tests/fixed-overlay-edge-sampling.test.tsx. */}
+              {}
               <div
                 inert={!isPresent}
                 className="pointer-events-none fixed inset-4 z-[100] flex items-center justify-center overflow-y-auto drop-shadow-2xl"
               >
-                {/* Drop-shadow reads the clipped child's alpha, so depth follows the
-                    unfolding silhouette without introducing another panel layer. */}
+                {}
                 <div className="flex w-full flex-col items-center py-8">
                   <motion.div
                     ref={panelRef}

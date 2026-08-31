@@ -31,7 +31,7 @@ function sameLayout(a: PortalLayout | null, b: PortalLayout) {
   );
 }
 
-/** Measures a trigger and portalled panel in viewport coordinates. */
+
 export function usePopoverPortalPosition<
   TriggerElement extends HTMLElement,
   ContentElement extends HTMLElement,

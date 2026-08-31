@@ -39,7 +39,7 @@ export function TableMenu({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
-    // Close on any scroll (the trigger moves) or resize; fixed coords go stale.
+    
     window.addEventListener("scroll", close, true);
     window.addEventListener("resize", close);
     window.addEventListener("keydown", onKey);

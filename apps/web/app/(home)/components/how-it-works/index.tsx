@@ -40,7 +40,7 @@ export default function HowItWorks({ className }: HowItWorksProps) {
                   index === 2 && "sm:col-span-2 md:col-span-1",
                 )}
               >
-                {/* Curved SVG Connector Line for Desktop / Tablet */}
+                {}
                 {index < HOW_IT_WORKS_STEPS.length - 1 ? (
                   <div className="hidden md:block absolute left-[64%] top-3 w-[80%] z-0 pointer-events-none">
                     <svg
@@ -59,12 +59,12 @@ export default function HowItWorks({ className }: HowItWorksProps) {
                   </div>
                 ) : null}
 
-                {/* Step Icon Container */}
+                {}
                 <div className="relative z-10 flex items-center justify-center w-24 h-24 rounded-3xl bg-muted text-muted-foreground/70 shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-105 group-hover:bg-muted-foreground/70 group-hover:text-white">
                   <Icon className="w-10 h-10 shrink-0" />
                 </div>
 
-                {/* Step Details */}
+                {}
                 <h3 className="mt-8 text-xl font-bold text-foreground tracking-tight">
                   {step.title}
                 </h3>

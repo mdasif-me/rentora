@@ -54,12 +54,12 @@ export class AiService {
     return this.callGeminiApi(sanitizedPrompt, allVehicles, apiKey);
   }
 
-  /** Admin dashboard chat: answers questions about leads, vehicles, and rental stats */
+  
   async adminChat(prompt: string): Promise<{ answer: string }> {
     const sanitizedPrompt = prompt.trim().slice(0, 500);
     const apiKey = process.env.AI_API_KEY && process.env.AI_API_KEY.trim();
 
-    // Gather live business context
+    
     const [totalLeads, approvedLeads, rejectedLeads, pendingLeads, vehicles] =
       await Promise.all([
         this.prisma.lead.count(),
@@ -107,7 +107,7 @@ Admin question: "${sanitizedPrompt}"
 `;
 
     if (!apiKey) {
-      // Fallback: answer from context without AI
+      
       return this.answerFromContext(sanitizedPrompt, {
         totalLeads,
         approvedLeads,

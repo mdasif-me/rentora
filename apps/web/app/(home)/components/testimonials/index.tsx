@@ -94,9 +94,9 @@ export default function Testimonials({ className }: TestimonialsProps) {
             ))}
           </CarouselContent>
 
-          {/* Bottom Controls Row: Dots on Left, Navigation Arrows on Right */}
+          {}
           <div className="mt-12 flex items-center justify-between pt-2">
-            {/* Left Pagination Dot Indicators */}
+            {}
             <div className="flex items-center gap-2">
               {Array.from({ length: count || TESTIMONIALS_DATA.length }).map((_, index) => (
                 <button
@@ -114,7 +114,7 @@ export default function Testimonials({ className }: TestimonialsProps) {
               ))}
             </div>
 
-            {/* Right Navigation Arrow Buttons */}
+            {}
             <div className="flex items-center gap-3">
               <Button
                 type="button"

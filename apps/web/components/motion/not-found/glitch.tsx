@@ -14,11 +14,7 @@ const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&@$?/\\";
 const SCRAMBLE_MS = 700;
 const TICK_MS = 45;
 
-/**
- * Renders the code, scrambling each character on mount before it settles.
- * SSR and the first paint show the real code, so the scramble is a pure
- * client-side enhancement and reduced-motion users see the code immediately.
- */
+
 function Scramble({ text }: { text: string }) {
   const reduce = useReducedMotion();
   const [display, setDisplay] = useState(text);
@@ -74,7 +70,7 @@ export function NotFoundGlitch({
   return (
     <NotFoundStage className={className}>
       <div className="group relative select-none font-mono font-bold leading-none tracking-tighter text-foreground text-[clamp(5rem,18vw,11rem)]">
-        {/* Chromatic ghost layers, nudged apart on hover. */}
+        {}
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 text-[#ff0040] opacity-0 mix-blend-screen transition-[transform,opacity] duration-150 ease-out group-hover:translate-x-0.75 group-hover:opacity-70 motion-reduce:hidden"

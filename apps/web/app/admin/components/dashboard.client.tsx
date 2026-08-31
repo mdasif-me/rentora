@@ -17,8 +17,6 @@ import { LeadsChart } from "./chart-interactive";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
-// ─── Status badge ─────────────────────────────────────────────────────────────
-
 function StatusBadge({ status }: { status: string }) {
   const s = status.toUpperCase();
   return (
@@ -40,8 +38,6 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
-
-// ─── Table columns ────────────────────────────────────────────────────────────
 
 const LEADS_COLUMNS: TableColumn<RecentLeadItem>[] = [
   {
@@ -143,8 +139,6 @@ const LEADS_COLUMNS: TableColumn<RecentLeadItem>[] = [
   },
 ];
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
-
 function CardSkeleton({
   dark = false,
   accent = false,
@@ -173,8 +167,6 @@ function CardSkeleton({
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export function AdminDashboardClient() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -187,7 +179,7 @@ export function AdminDashboardClient() {
         const res = await fetch(`${API}/dashboard`, { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        // NestJS global interceptor wraps response in { success, data, timestamp }
+
         const data: DashboardStats = json?.data ?? json;
         setStats(data);
       } catch (err) {
@@ -202,7 +194,7 @@ export function AdminDashboardClient() {
 
   return (
     <div className="flex flex-col space-y-10 max-w-[1600px] mx-auto pb-12">
-      {/* Header */}
+      {}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
           Dashboard Overview
@@ -212,14 +204,14 @@ export function AdminDashboardClient() {
         </p>
       </div>
 
-      {/* Error */}
+      {}
       {error && (
         <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 font-medium">
           {error}
         </div>
       )}
 
-      {/* ── Row 1: 3 Metric Cards ── */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {loading ? (
           <>
@@ -229,9 +221,9 @@ export function AdminDashboardClient() {
           </>
         ) : (
           <>
-            {/* Card 1 — Weekly Earnings */}
+            {}
             <div className="relative rounded-2xl border border-zinc-100 bg-white shadow-sm overflow-hidden">
-              {/* top accent bar */}
+              {}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-orange-400 rounded-t-2xl" />
               <div className="p-6">
                 <div className="flex items-start justify-between">
@@ -254,7 +246,7 @@ export function AdminDashboardClient() {
                     <RiMoneyDollarCircleLine className="h-5 w-5 text-white" />
                   </div>
                 </div>
-                {/* divider */}
+                {}
                 <div className="mt-5 pt-4 border-t border-zinc-100 flex items-center gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-600">
                     <RiMoneyDollarCircleLine className="h-3 w-3" />$
@@ -264,9 +256,9 @@ export function AdminDashboardClient() {
               </div>
             </div>
 
-            {/* Card 2 — Total Leads */}
+            {}
             <div className="relative rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 shadow-sm overflow-hidden">
-              {/* decorative ring */}
+              {}
               <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full border border-white/5" />
               <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full border border-white/5" />
               <div className="p-6">
@@ -285,7 +277,7 @@ export function AdminDashboardClient() {
                   Total Rental Requests
                 </p>
 
-                {/* Visual breakdown bar */}
+                {}
                 {(stats?.totalLeads ?? 0) > 0 && (
                   <div className="mt-4">
                     <div className="flex rounded-full overflow-hidden h-1.5 bg-white/10 gap-px">
@@ -333,7 +325,7 @@ export function AdminDashboardClient() {
               </div>
             </div>
 
-            {/* Card 3 — Fleet Vehicles */}
+            {}
             <div className="relative rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-sm overflow-hidden">
               <div className="absolute -left-6 -bottom-6 h-28 w-28 rounded-full bg-white/10" />
               <div className="absolute -left-2 -bottom-2 h-16 w-16 rounded-full bg-white/10" />
@@ -380,12 +372,12 @@ export function AdminDashboardClient() {
         )}
       </div>
 
-      {/* ── Row 2: Leads Chart ── */}
+      {}
       <div>
         <LeadsChart data={stats?.chart ?? null} loading={loading} />
       </div>
 
-      {/* ── Row 3: Recent Leads Table ── */}
+      {}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between px-1">
           <h3 className="font-semibold text-xl text-zinc-900">Recent Leads</h3>

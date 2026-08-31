@@ -29,7 +29,7 @@ interface Props {
 export default function CreateVehicleClientPage({ categories: initialCategories }: Props) {
   const router = useRouter();
 
-  // Vehicle form state
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -38,13 +38,13 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
     Array.isArray(initialCategories) ? initialCategories : [],
   );
 
-  // Category modal state — lives outside the vehicle <form>
+  
   const [modalOpen, setModalOpen] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [catError, setCatError] = useState("");
   const [catIsActive, setCatIsActive] = useState(true);
 
-  // ── Handlers ─────────────────────────────────────────────────────────────────
+  
 
   const handleCreateCategory = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,11 +93,11 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
     }
   };
 
-  // ── Render ────────────────────────────────────────────────────────────────────
+  
 
   return (
     <div className="flex flex-col space-y-6 mx-auto pb-12">
-      {/* Header */}
+      {}
       <div className="flex items-center gap-4">
         <Link href="/admin/vehicles">
           <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-zinc-200">
@@ -115,11 +115,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
           <CardTitle className="text-lg font-bold text-zinc-900">Vehicle Details</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
-          {/*
-           * CenterMorphModal lives here as a SIBLING of the <form>, not inside it.
-           * This prevents React's synthetic event system from bubbling the modal's
-           * form submit up through the vehicle form's onSubmit handler.
-           */}
+          {}
           <CenterMorphModal open={modalOpen} onOpenChange={setModalOpen}>
             <CenterMorphModalContent ariaLabel="Create category" className="max-w-[38rem]">
               <div className="p-8">
@@ -226,7 +222,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
             </CenterMorphModalContent>
           </CenterMorphModal>
 
-          {/* Vehicle form — entirely separate from the modal above */}
+          {}
           <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
             {error && (
               <div className="p-3 bg-rose-50 text-rose-600 text-sm rounded-lg font-medium">
@@ -235,7 +231,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Vehicle Name */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="name" className="text-sm font-semibold text-zinc-700">
                   Vehicle Name *
@@ -250,12 +246,11 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 />
               </div>
 
-              {/* Category */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-semibold text-zinc-700">Category *</label>
-                  {/* This button opens the modal — it is type="button" and lives inside
-                      the vehicle form, but the modal itself is a sibling of this form */}
+                  {}
                   <button
                     type="button"
                     onClick={() => setModalOpen(true)}
@@ -286,7 +281,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 </Select>
               </div>
 
-              {/* Type */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="type" className="text-sm font-semibold text-zinc-700">
                   Type *
@@ -301,7 +296,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 />
               </div>
 
-              {/* Price Per Day */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="pricePerDay" className="text-sm font-semibold text-zinc-700">
                   Price Per Day ($) *
@@ -318,7 +313,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 />
               </div>
 
-              {/* Transmission */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <label className="text-sm font-semibold text-zinc-700">Transmission *</label>
                 <Select value={transmission} onValueChange={setTransmission}>
@@ -332,7 +327,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 </Select>
               </div>
 
-              {/* Fuel */}
+              {}
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="fuel" className="text-sm font-semibold text-zinc-700">
                   Fuel *
@@ -347,7 +342,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 />
               </div>
 
-              {/* Location */}
+              {}
               <div className="flex flex-col space-y-1.5 sm:col-span-2">
                 <label htmlFor="location" className="text-sm font-semibold text-zinc-700">
                   Location *
@@ -362,7 +357,7 @@ export default function CreateVehicleClientPage({ categories: initialCategories 
                 />
               </div>
 
-              {/* Image */}
+              {}
               <div className="flex flex-col space-y-1.5 sm:col-span-2">
                 <label htmlFor="image" className="text-sm font-semibold text-zinc-700">
                   Vehicle Image (Optional)

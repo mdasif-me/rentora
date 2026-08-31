@@ -17,7 +17,7 @@ export interface CheckboxProps {
   className?: string;
   id?: string;
   "aria-label"?: string;
-  /** Associates an external message (e.g. a form error) with the control. */
+  
   "aria-describedby"?: string;
 }
 

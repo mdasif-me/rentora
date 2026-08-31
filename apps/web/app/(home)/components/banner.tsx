@@ -15,7 +15,7 @@ export default function Banner() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Content Column (Below image on small devices, Left on desktop) */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -55,7 +55,7 @@ export default function Banner() {
             </div>
           </motion.div>
 
-          {/* Image Column (On top on small devices, Right side on desktop) */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}

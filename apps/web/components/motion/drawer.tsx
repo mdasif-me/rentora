@@ -12,12 +12,12 @@ export interface DrawerProps {
   onOpenChange: (open: boolean) => void;
   side?: "left" | "right";
   children: ReactNode;
-  /** Class for the panel surface. */
+  
   className?: string;
-  /** Class for the backdrop. */
+  
   backdropClassName?: string;
   ariaLabel?: string;
-  /** Close when the backdrop is clicked. Default true. */
+  
   dismissable?: boolean;
 }
 
@@ -60,7 +60,7 @@ export function Drawer({
     <AnimatePresence>
       {open && (
         <>
-          {/* Viewport Dark Backdrop */}
+          {}
           <motion.div
             key="drawer-backdrop"
             initial={{ opacity: 0 }}
@@ -75,7 +75,7 @@ export function Drawer({
             aria-hidden="true"
           />
 
-          {/* Drawer Slide-In Panel Surface */}
+          {}
           <motion.aside
             key="drawer-panel"
             role="dialog"

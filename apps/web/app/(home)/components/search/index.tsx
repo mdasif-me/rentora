@@ -87,7 +87,7 @@ export default function Search({
           onSubmit={handleSubmit}
           className="flex flex-col lg:flex-row items-center justify-between gap-6"
         >
-          {/* Pick - Up Section */}
+          {}
           <div
             className={cn(
               "w-full lg:w-auto flex-1 border-b lg:border-b-0 lg:border-r border-zinc-100 pb-4 lg:pb-0 lg:pr-6 transition-opacity duration-200",
@@ -197,7 +197,7 @@ export default function Search({
             </div>
           </div>
 
-          {/* Drop - Off Section */}
+          {}
           <div
             className={cn(
               "w-full lg:w-auto flex-1 pb-4 lg:pb-0 lg:pr-6 transition-opacity duration-200",

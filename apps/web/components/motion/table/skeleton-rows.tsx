@@ -18,7 +18,7 @@ export function SkeletonRows<T>({
   return (
     <>
       {Array.from({ length: count }, (_, r) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder rows
+        
         <tr key={r} style={{ height: rowHeight }} className="border-border/60 border-b">
           {selectable ? <td /> : null}
           {columns.map((column) => (

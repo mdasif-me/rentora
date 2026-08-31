@@ -15,7 +15,7 @@ export default function Footer({ className }: FooterProps) {
     <footer id="footer" className={cn("bg-zinc-200/70 pt-16 pb-8 lg:pt-20 lg:pb-12 border-t border-zinc-200/80", className)}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          {/* Brand Column */}
+          {}
           <div className="lg:col-span-5 flex flex-col items-start space-y-6">
             <Link href="/" className="text-3xl font-extrabold text-foreground tracking-tight">
               {FOOTER_BRAND.logoText}
@@ -44,7 +44,7 @@ export default function Footer({ className }: FooterProps) {
             </div>
           </div>
 
-          {/* Navigation Link Columns */}
+          {}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12">
             {FOOTER_LINK_GROUPS.map((group) => (
               <div key={group.id} className="flex flex-col space-y-4">
@@ -68,7 +68,7 @@ export default function Footer({ className }: FooterProps) {
           </div>
         </div>
 
-        {/* Bottom Legal & Copyright Bar */}
+        {}
         <div className="border-t border-zinc-300/80 pt-8 mt-16 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm font-bold text-foreground">
             {FOOTER_BRAND.copyright}

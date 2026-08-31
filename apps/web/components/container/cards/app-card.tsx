@@ -28,7 +28,7 @@ export function AppCard({
         className,
       )}
     >
-      {/* Full Width and Full Height Image */}
+      {}
       <Image
         src={vehicle.image}
         alt={vehicle.name}
@@ -37,7 +37,7 @@ export function AppCard({
         className="object-cover w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-105"
       />
 
-      {/* Top Header inside Card */}
+      {}
       <div className="relative z-10 flex items-center justify-between">
         <h3 className="text-base font-bold text-white tracking-tight drop-shadow-sm">
           {vehicle.name}
@@ -57,7 +57,7 @@ export function AppCard({
         </button>
       </div>
 
-      {/* Bottom Footer inside Card */}
+      {}
       <div className="relative z-10 flex items-center justify-between gap-2 pt-2">
         <div className="flex items-baseline gap-1">
           <span className="text-base sm:text-lg font-bold text-white drop-shadow-sm">

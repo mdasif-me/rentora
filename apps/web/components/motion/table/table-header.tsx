@@ -53,7 +53,7 @@ export interface TableHeaderProps<T> {
   onColumnDeactivate?: () => void;
 }
 
-/** Column insert / delete menu items shared by the header cell and the portal handle. */
+
 function columnMenuItems<T>(
   column: TableColumn<T>,
   index: number,
@@ -88,8 +88,7 @@ function columnMenuItems<T>(
   ];
 }
 
-/** The ellipse handle, portaled so it can sit on the column's top border without
- * the scroll container clipping it. Straddles the border to bridge hover. */
+
 function ColumnHandle<T>({
   column,
   index,
@@ -254,8 +253,8 @@ export function TableHeader<T>({
                     onPointerUp={onReorderEnd}
                     className={cn(
                       "flex h-full w-6 cursor-grab touch-none items-center justify-center text-muted-foreground/60 transition-colors hover:text-foreground active:cursor-grabbing",
-                      // The grip owns the whole press, so iOS must not open its
-                      // callout out of the same one and cancel the drag.
+                      
+                      
                       TOUCH_GESTURE_CLASS,
                     )}
                   >
@@ -325,7 +324,7 @@ export function TableHeader<T>({
                   onPointerUp={onResizeEnd}
                   className={cn(
                     "absolute top-0 right-0 h-full w-1.5 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40",
-                    // Same for the resize drag: the handle drives it end to end.
+                    
                     TOUCH_GESTURE_CLASS,
                   )}
                 />

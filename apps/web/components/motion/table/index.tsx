@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-// beui.dev/components/motion/table
+
 
 import { Checkbox } from "@/components/motion/checkbox";
 import { cn } from "@/lib/utils";
@@ -25,22 +25,13 @@ export type {
   TableProps,
 } from "./types";
 
-/**
- * Narrowest a column of bare inputs may be floored to and still show a value:
- * the cell's own `px-4` eats 32 of it.
- */
+
 const INPUT_COLUMN_WIDTH = 120;
 
-/** The root font size Tailwind's rem scale assumes, and the pre-measure guess. */
+
 const DEFAULT_ROOT_FONT_SIZE = 16;
 
-/**
- * What one `rem` is worth here, in px. The default until the first client
- * layout, so the server and the hydrating client emit the same floor; measured
- * once after that, because a document that sets its own `html { font-size }`
- * lays a rem column out against that size and a floor computed from 16 would
- * fall short by the same factor.
- */
+
 function useRootFontSize() {
   const [size, setSize] = useState(DEFAULT_ROOT_FONT_SIZE);
   useEffect(() => {
@@ -52,11 +43,7 @@ function useRootFontSize() {
   return size;
 }
 
-/**
- * The absolute width a column declared, in px, or null when it declared a share
- * of the remainder instead (`fr`, `%`, `auto`, `calc()`, nothing at all) — those
- * are worth whatever is left over, which is not a width this can add up.
- */
+
 function resolveColumnWidth(
   width: string | undefined,
   rootFontSize: number,
@@ -65,7 +52,7 @@ function resolveColumnWidth(
   const value = Number.parseFloat(width);
   if (!Number.isFinite(value)) return null;
   if (width.endsWith("px")) return value;
-  // rem is the other absolute length the repo writes.
+  
   if (width.endsWith("rem")) return value * rootFontSize;
   return null;
 }
@@ -165,23 +152,23 @@ export function Table<T>({
 
   const hasRowMenu = !!(onInsertRow || onDeleteRow);
   const hasColumnMenu = !!(onInsertColumn || onDeleteColumn);
-  // Only shrink-wrap (w-max) once every column has an explicit resized width;
-  // otherwise stay fill-width so a flexible column can't size to cell content.
+  
+  
   const sized =
     orderedColumns.length > 0 &&
     orderedColumns.every((c) => widths[c.key] != null);
 
   const rootFontSize = useRootFontSize();
-  // In a container narrower than the columns, `table-layout: fixed` shrinks
-  // every column toward zero instead of scrolling. Floor the table at what the
-  // columns actually asked for — an absolute declared width where there is one,
-  // and for the ones sharing the remainder whatever content they can fall back
-  // on — then let the viewport scroll past it.
+  
+  
+  
+  
+  
   const minTableWidth = useMemo(() => {
-    // A column whose cells render bare inputs has no content for the fallback
-    // to measure, which is exactly the column that collapses; a renamable
-    // header is an input too, and in a fixed layout the header row is what
-    // sizes the column.
+    
+    
+    
+    
     const inputOnly = (column: (typeof orderedColumns)[number]) =>
       Boolean(onColumnRename) || (!column.cell && Boolean(column.editable));
     const total = orderedColumns.reduce(
@@ -209,8 +196,8 @@ export function Table<T>({
     widths,
   ]);
 
-  // Infinite scroll: fire onEndReached once per near-bottom dwell, paused while
-  // loading; the guard resets when the load completes.
+  
+  
   const endReachedRef = useRef(false);
   useEffect(() => {
     if (!loading) endReachedRef.current = false;
@@ -224,8 +211,8 @@ export function Table<T>({
     }
   }, [onEndReached, loading, rowHeight]);
   const [activeColumn, setActiveColumn] = useState<string | null>(null);
-  // Small delay on leave so the pointer can cross the gap from the header cell
-  // to the portal handle without the column deactivating.
+  
+  
   const deactivateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activateColumn = useCallback((key: string) => {
     if (deactivateTimer.current) clearTimeout(deactivateTimer.current);
@@ -253,7 +240,7 @@ export function Table<T>({
     rowTimer.current = setTimeout(() => setActiveRow(null), 100);
   }, []);
   const activeRowEl = activeRow ? rowRefs.current[activeRow.id] : null;
-  // Real columns + checkbox; the trailing spacer adds one more in colSpans.
+  
   const leadColumns = columns.length + (selectable ? 1 : 0);
 
   return (
@@ -285,7 +272,7 @@ export function Table<T>({
                 <col key={column.key} style={width ? { width } : undefined} />
               );
             })}
-            {/* Empty filler owns the leftover space — no gap, content unpinned. */}
+            {}
             <col />
           </colgroup>
 

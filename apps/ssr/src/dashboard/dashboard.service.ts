@@ -7,30 +7,30 @@ export interface ChartPoint {
 }
 
 export interface RentalDashboardStats {
-  /** Sum of approved leads' vehicle.pricePerDay for leads created in the current week */
+  
   weeklyEarnings: number;
-  /** Total leads ever submitted */
+  
   totalLeads: number;
-  /** Approved leads count */
+  
   approvedLeads: number;
-  /** Rejected leads count */
+  
   rejectedLeads: number;
-  /** Pending leads count */
+  
   pendingLeads: number;
-  /** Total vehicles in fleet */
+  
   totalVehicles: number;
-  /** Lowest pricePerDay */
+  
   minPrice: number;
-  /** Highest pricePerDay */
+  
   maxPrice: number;
-  /** Chart data keyed by range */
+  
   chart: {
-    hourly: ChartPoint[]; // last 24 hours, per hour
-    daily: ChartPoint[]; // last 30 days, per day
-    monthly: ChartPoint[]; // last 12 months, per month
-    quarterly: ChartPoint[]; // last 3 months, per month (same as monthly[last 3])
+    hourly: ChartPoint[]; 
+    daily: ChartPoint[]; 
+    monthly: ChartPoint[]; 
+    quarterly: ChartPoint[]; 
   };
-  /** Latest 10 leads with vehicle details */
+  
   recentLeads: RecentLeadItem[];
 }
 
@@ -56,7 +56,7 @@ export class DashboardService {
   async getStats(): Promise<RentalDashboardStats> {
     const now = new Date();
 
-    // ── 1. Weekly Earnings ────────────────────────────────────────────────────
+    
     const weekStart = new Date(now);
     weekStart.setDate(weekStart.getDate() - 7);
     weekStart.setHours(0, 0, 0, 0);
@@ -70,7 +70,7 @@ export class DashboardService {
       0,
     );
 
-    // ── 2. Counts ─────────────────────────────────────────────────────────────
+    
     const [totalLeads, approvedLeads, rejectedLeads, pendingLeads] =
       await Promise.all([
         this.prisma.lead.count(),
@@ -79,14 +79,14 @@ export class DashboardService {
         this.prisma.lead.count({ where: { status: 'PENDING' } }),
       ]);
 
-    // ── 3. Vehicle fleet stats ────────────────────────────────────────────────
+    
     const vehicleAgg = await this.prisma.vehicle.aggregate({
       _count: { id: true },
       _min: { pricePerDay: true },
       _max: { pricePerDay: true },
     });
 
-    // ── 4. Chart: hourly (last 24 h) ─────────────────────────────────────────
+    
     const hourlyStart = new Date(now);
     hourlyStart.setUTCHours(hourlyStart.getUTCHours() - 23, 0, 0, 0);
 
@@ -111,7 +111,7 @@ export class DashboardService {
       ([label, count]) => ({ label, count }),
     );
 
-    // ── 5. Chart: daily (last 30 days) ───────────────────────────────────────
+    
     const dailyStart = new Date(now);
     dailyStart.setUTCDate(dailyStart.getUTCDate() - 29);
     dailyStart.setUTCHours(0, 0, 0, 0);
@@ -137,7 +137,7 @@ export class DashboardService {
       ([label, count]) => ({ label, count }),
     );
 
-    // ── 6. Chart: monthly (last 12 months) ───────────────────────────────────
+    
     const monthlyStart = new Date(now);
     monthlyStart.setUTCMonth(monthlyStart.getUTCMonth() - 11);
     monthlyStart.setUTCDate(1);
@@ -164,10 +164,10 @@ export class DashboardService {
       ([label, count]) => ({ label, count }),
     );
 
-    // ── 7. Chart: quarterly (last 3 months) ──────────────────────────────────
+    
     const quarterly = monthly.slice(-3);
 
-    // ── 8. Recent leads ───────────────────────────────────────────────────────
+    
     const rawLeads = await this.prisma.lead.findMany({
       take: 10,
       orderBy: { createdAt: 'desc' },

@@ -22,7 +22,7 @@ export default function PopularDeals({
   className,
   onRentNow,
 }: PopularDealsProps) {
-  // Construct dynamic category tabs: "Popular" (all) + DB categories
+  
   const categoriesList = [
     { id: "all", label: "Popular", value: "popular" },
     ...initialCategories.map((c) => ({
@@ -32,7 +32,7 @@ export default function PopularDeals({
     })),
   ];
 
-  // Pagination state (visible cars limit)
+  
   const [visibleLimit, setVisibleLimit] = useState(8);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
 
@@ -65,7 +65,7 @@ export default function PopularDeals({
       className={cn("py-20 lg:py-28 bg-muted overflow-hidden", className)}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {}
         <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-foreground">
             {POPULAR_DEALS_HEADER.title}
@@ -76,7 +76,7 @@ export default function PopularDeals({
         </div>
 
         <Tabs defaultValue="popular" variant="underline">
-          {/* Scrollable Tabs Header */}
+          {}
           <div className="border-b border-zinc-200 mb-10 overflow-x-auto scrollbar-none">
             <TabsList className="flex flex-nowrap min-w-full justify-start gap-4 sm:gap-12 border-b-0 pb-0 bg-transparent">
               {categoriesList.map((cat) => (
@@ -92,15 +92,15 @@ export default function PopularDeals({
             </TabsList>
           </div>
 
-          {/* Tabs Content */}
+          {}
           {categoriesList.map((cat) => {
-            // Filter vehicles belonging to this category
+            
             const filteredVehicles =
               cat.value === "popular"
                 ? initialVehicles
                 : initialVehicles.filter((v) => v.categoryId === cat.value);
 
-            // Paginated slice
+            
             const displayedVehicles = filteredVehicles.slice(0, visibleLimit);
             const hasMore = filteredVehicles.length > visibleLimit;
 
@@ -109,7 +109,7 @@ export default function PopularDeals({
                 {displayedVehicles.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {displayedVehicles.map((vehicle, idx) => {
-                      // Map Vehicle -> AppCardData format
+                      
                       const cardData = {
                         id: vehicle.id,
                         name: vehicle.name,
@@ -145,7 +145,7 @@ export default function PopularDeals({
                   </div>
                 )}
 
-                {/* Bottom Pagination Bar inside each tab */}
+                {}
                 {filteredVehicles.length > 0 && (
                   <div className="relative mt-12 sm:mt-16 flex items-center justify-center">
                     {hasMore ? (

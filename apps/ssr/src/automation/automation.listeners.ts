@@ -12,7 +12,7 @@ export class AutomationListeners {
       `[Webhook Triggered] Sending Admin Notification for Lead ID: ${payload.id}`,
     );
 
-    // Simulate webhook API call delay
+    
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     this.logger.log(
@@ -26,7 +26,7 @@ export class AutomationListeners {
       `[Email Triggered] Sending confirmation email to ${payload.email}`,
     );
 
-    // Simulate email API call delay
+    
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     this.logger.log(

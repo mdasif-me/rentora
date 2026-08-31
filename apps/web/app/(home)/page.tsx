@@ -36,7 +36,6 @@ async function getData(): Promise<{
 export default async function HomePage() {
   const { categories, vehicles } = await getData();
 
-  // Extract unique locations from vehicles array
   const rawLocations = Array.from(
     new Set(vehicles.map((v) => v.location).filter(Boolean)),
   );

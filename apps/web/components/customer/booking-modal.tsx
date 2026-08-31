@@ -65,7 +65,7 @@ export default function BookingModal({
 
   const [prevVehicleId, setPrevVehicleId] = useState<string | null>(null);
 
-  // Initialize form state when vehicle selection changes during rendering
+  
   if (vehicle && vehicle.id !== prevVehicleId) {
     setPrevVehicleId(vehicle.id);
     setIsSuccess(false);
@@ -155,7 +155,7 @@ export default function BookingModal({
       >
         {vehicle && (
           <div className="flex flex-col gap-4">
-            {/* Header */}
+            {}
             <div className="border-b border-zinc-100 pb-3">
               <h3 className="text-base font-bold text-zinc-950">
                 {isSuccess ? "Request Confirmed!" : `Book ${vehicle.name}`}
@@ -189,7 +189,7 @@ export default function BookingModal({
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
-                {/* Names */}
+                {}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
@@ -227,7 +227,7 @@ export default function BookingModal({
                   </div>
                 </div>
 
-                {/* Email & Phone */}
+                {}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
@@ -265,7 +265,7 @@ export default function BookingModal({
                   </div>
                 </div>
 
-                {/* Locations */}
+                {}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
@@ -363,7 +363,7 @@ export default function BookingModal({
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  {/* Pick-up Date */}
+                  {}
                   <div>
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
                       Pick-up Date
@@ -392,7 +392,7 @@ export default function BookingModal({
                     </Popover>
                   </div>
 
-                  {/* Drop-off Date */}
+                  {}
                   <div>
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">
                       Drop-off Date
@@ -422,7 +422,7 @@ export default function BookingModal({
                   </div>
                 </div>
 
-                {/* Footer Actions */}
+                {}
                 <div className="flex gap-3 justify-end border-t border-zinc-100 pt-4 mt-2">
                   <Button
                     type="button"

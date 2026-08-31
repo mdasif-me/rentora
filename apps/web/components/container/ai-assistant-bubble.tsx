@@ -181,7 +181,7 @@ export default function AiAssistantBubble() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      {/* Chat Window */}
+      {}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -191,7 +191,7 @@ export default function AiAssistantBubble() {
             exit="exit"
             className="w-[380px] max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl border border-zinc-200/80 bg-white shadow-2xl flex flex-col overflow-hidden mb-4 origin-bottom-right"
           >
-            {/* Header */}
+            {}
             <div className="p-4 bg-gradient-to-r from-orange-600 to-amber-500 text-white flex items-center justify-between shadow-md">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
@@ -214,7 +214,7 @@ export default function AiAssistantBubble() {
               </button>
             </div>
 
-            {/* Messages List */}
+            {}
             <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-zinc-50/50">
               {messages.map((msg) => (
                 <div
@@ -237,7 +237,7 @@ export default function AiAssistantBubble() {
                     {msg.text}
                   </div>
 
-                  {/* mini-cards if bot recommends vehicles */}
+                  {}
                   {msg.vehicles && msg.vehicles.length > 0 && (
                     <DragScrollContainer className="w-full flex gap-2.5 overflow-x-auto py-2 px-1 scrollbar-none max-w-[340px]">
                       {msg.vehicles.map((car) => (
@@ -305,7 +305,7 @@ export default function AiAssistantBubble() {
               <div ref={chatEndRef} />
             </div>
 
-            {/* Quick Prompts */}
+            {}
             {messages.length === 1 && !isLoading && (
               <div className="px-4 py-2 border-t border-zinc-100 bg-zinc-50/50 flex flex-col gap-1.5">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">
@@ -330,7 +330,7 @@ export default function AiAssistantBubble() {
               </div>
             )}
 
-            {/* Footer Input */}
+            {}
             <form
               onSubmit={handleSend}
               className="p-3 border-t border-zinc-200/80 flex items-center gap-2 bg-white"
@@ -356,7 +356,7 @@ export default function AiAssistantBubble() {
         )}
       </AnimatePresence>
 
-      {/* Bubble Trigger Button */}
+      {}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="h-14 w-14 rounded-full bg-gradient-to-tr from-orange-600 to-amber-500 text-white flex items-center justify-center shadow-xl hover:scale-105 transition-all duration-200 cursor-pointer border border-white/20 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-orange-500"

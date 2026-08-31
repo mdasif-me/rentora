@@ -17,7 +17,7 @@ export class SupabaseService {
       );
     }
 
-    // Provide dummy values if missing to prevent the server from crashing on boot
+    
     this.supabase = createClient(
       supabaseUrl || 'https://placeholder.supabase.co',
       supabaseKey || 'placeholder_key',
@@ -33,7 +33,7 @@ export class SupabaseService {
       const { data: bucketInfo, error: getError } = await this.supabase.storage.getBucket(bucket);
 
       if (getError) {
-        // If the bucket doesn't exist, create it as public
+        
         const { error: createError } = await this.supabase.storage.createBucket(bucket, {
           public: true,
         });
@@ -43,7 +43,7 @@ export class SupabaseService {
           this.verifiedBuckets.add(bucket);
         }
       } else if (bucketInfo && !bucketInfo.public) {
-        // If it exists but is private, update it to public
+        
         const { error: updateError } = await this.supabase.storage.updateBucket(bucket, {
           public: true,
         });
@@ -76,7 +76,7 @@ export class SupabaseService {
       );
     }
 
-    // Ensure the bucket exists and is public before uploading
+    
     await this.ensureBucketIsPublic(bucket);
 
     try {

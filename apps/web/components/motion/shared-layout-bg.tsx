@@ -28,13 +28,13 @@ export interface SharedLayoutBgProps extends Omit<
   "children"
 > {
   children: ReactNode;
-  /** Semantic container used for the children. */
+  
   as?: "div" | "ul";
-  /** Tailwind class applied to the moving pill. Defaults to a subtle foreground tint. */
+  
   pillClassName?: string;
-  /** Horizontal inset of the pill relative to each row (px). Default 20. */
+  
   inset?: number;
-  /** Optional positioning override for the pill wrapper inside each item. */
+  
   pillContainerClassName?: string;
 }
 
@@ -126,8 +126,8 @@ export const SharedLayoutBg = forwardRef<HTMLElement, SharedLayoutBgProps>(
       onMouseLeave?.(event);
     };
 
-    // layoutRoot scopes the pill's layout projection to this list, so fixed or
-    // scrolled ancestors can't smear scroll offsets into its movement.
+    
+    
     return as === "ul" ? (
       <motion.ul
         {...(props as HTMLMotionProps<"ul">)}

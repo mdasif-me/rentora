@@ -75,12 +75,12 @@ export function AdminSearchClient() {
   return (
     <div className="flex flex-col h-[calc(100vh-140px)] w-full max-w-4xl mx-auto rounded-3xl bg-background border border-border shadow-sm overflow-hidden relative">
       
-      {/* Background decoration */}
+      {}
       <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
 
-      {/* Messages Scroll Area */}
+      {}
       <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8 z-10 scrollbar-none">
-        {/* Welcome Header */}
+        {}
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center py-10 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="h-16 w-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mb-4 shadow-sm relative overflow-hidden">
@@ -99,7 +99,7 @@ export function AdminSearchClient() {
           </div>
         )}
 
-        {/* Conversation */}
+        {}
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -114,7 +114,7 @@ export function AdminSearchClient() {
                 msg.role === "user" ? "flex-row-reverse" : "flex-row"
               )}
             >
-              {/* Avatar */}
+              {}
               <div
                 className={cn(
                   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-sm mt-1 border",
@@ -130,7 +130,7 @@ export function AdminSearchClient() {
                 )}
               </div>
 
-              {/* Bubble */}
+              {}
               <div
                 className={cn(
                   "rounded-2xl px-5 py-3.5 text-sm leading-relaxed shadow-sm",
@@ -145,7 +145,7 @@ export function AdminSearchClient() {
           </div>
         ))}
 
-        {/* Typing Indicator */}
+        {}
         {loading && (
           <div className="flex w-full justify-start animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex max-w-[80%] gap-4">
@@ -164,7 +164,7 @@ export function AdminSearchClient() {
         <div ref={bottomRef} className="h-2" />
       </div>
 
-      {/* Input Area */}
+      {}
       <div className="shrink-0 bg-background/80 backdrop-blur-xl border-t border-border p-4 z-20">
         <div className="max-w-3xl mx-auto">
           {messages.length === 1 && (

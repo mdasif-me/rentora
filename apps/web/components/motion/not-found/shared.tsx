@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 export interface NotFoundProps {
   className?: string;
-  /** The big status code. */
+  
   code?: string;
   title?: string;
   description?: string;
@@ -33,7 +33,7 @@ type ActionsProps = Pick<
   "homeHref" | "homeLabel" | "browseHref" | "browseLabel" | "className"
 >;
 
-/** The shared dual CTA: a primary "Back home" and a secondary "Browse". */
+
 export function NotFoundActions({
   homeHref = NOT_FOUND_DEFAULTS.homeHref,
   homeLabel = NOT_FOUND_DEFAULTS.homeLabel,
@@ -75,7 +75,7 @@ export function NotFoundActions({
   );
 }
 
-/** Centers a variant and gives it a consistent minimum stage height. */
+
 export function NotFoundStage({
   className,
   children,

@@ -55,7 +55,7 @@ export default function LeadsClientPage({
       });
       if (!res.ok) throw new Error("Failed to update status");
 
-      // Update local state lists
+      
       setLeads((prev) =>
         prev.map((l) => (l.id === leadId ? { ...l, status } : l)),
       );
@@ -238,7 +238,7 @@ export default function LeadsClientPage({
         </div>
       </Card>
 
-      {/* Lead Detail Modal */}
+      {}
       <CenterMorphModal
         open={selectedLead !== null}
         onOpenChange={(open) => {
@@ -278,7 +278,7 @@ export default function LeadsClientPage({
                 </p>
               </div>
 
-              {/* Contact Information */}
+              {}
               <div className="space-y-3 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                   Contact details
@@ -295,7 +295,7 @@ export default function LeadsClientPage({
                 </div>
               </div>
 
-              {/* Vehicle Information */}
+              {}
               <div className="space-y-3 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                   Vehicle requested
@@ -330,7 +330,7 @@ export default function LeadsClientPage({
                 )}
               </div>
 
-              {/* Route & Booking Details */}
+              {}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
