@@ -51,6 +51,10 @@ export default function PopularDeals({
     }
   };
 
+  const availableLocations = Array.from(
+    new Set(initialVehicles.map((v) => v.location).filter(Boolean)),
+  );
+
   return (
     <motion.section
       id="popular-deals"
@@ -176,6 +180,7 @@ export default function PopularDeals({
         vehicle={selectedVehicle}
         isOpen={selectedVehicle !== null}
         onClose={() => setSelectedVehicle(null)}
+        availableLocations={availableLocations}
       />
     </motion.section>
   );

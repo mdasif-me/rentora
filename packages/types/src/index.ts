@@ -35,34 +35,44 @@ export interface Lead {
   pickUpDate: string;
   dropOffDate: string;
   createdAt: Date;
+  status?: string;
   vehicle?: Vehicle;
 }
 
-export interface Transaction {
-  id: string;
-  carName: string;
-  image?: string;
-  type: string;
-  date: string;
-  amount: number;
-  status: "Completed" | "Pending" | "Cancelled";
-}
-
-export interface BestSeller {
+export interface RecentLeadItem {
   id: string;
   name: string;
-  category: string;
-  image?: string;
-  rentCount: number;
-  price: number;
+  email: string;
+  phone: string;
+  vehicleName: string;
+  vehiclePrice: number;
+  pickUpLocation: string;
+  dropOffLocation: string;
+  pickUpDate: string;
+  dropOffDate: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface ChartPoint {
+  label: string;
+  count: number;
 }
 
 export interface DashboardStats {
-  weeklyEarnings: { value: number; change: number };
-  totalSales: { value: number; change: number };
-  purchasedGoods: { value: number; change: number };
-  bestSellers: BestSeller[];
-  recentTransactions: Transaction[];
-  salesChartData: { month: string; sales: number }[];
-  salesByCountry: { country: string; value: number }[];
+  weeklyEarnings: number;
+  totalLeads: number;
+  approvedLeads: number;
+  rejectedLeads: number;
+  pendingLeads: number;
+  totalVehicles: number;
+  minPrice: number;
+  maxPrice: number;
+  chart: {
+    hourly: ChartPoint[];
+    daily: ChartPoint[];
+    monthly: ChartPoint[];
+    quarterly: ChartPoint[];
+  };
+  recentLeads: RecentLeadItem[];
 }

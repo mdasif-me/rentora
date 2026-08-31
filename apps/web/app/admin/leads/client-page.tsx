@@ -7,6 +7,7 @@ import {
 import { Table, type TableColumn } from "@/components/motion/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import {
   RiCalendarEventLine,
   RiCarLine,
@@ -19,15 +20,55 @@ import type { Lead } from "@rentora/types";
 import Image from "next/image";
 import { useState } from "react";
 
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+
 export default function LeadsClientPage({
   initialData,
 }: {
   initialData: Lead[];
 }) {
-  const [leads] = useState<Lead[]>(
+  const [leads, setLeads] = useState<Lead[]>(
     Array.isArray(initialData) ? initialData : [],
   );
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [processingStatus, setProcessingStatus] = useState<
+    "APPROVED" | "REJECTED" | null
+  >(null);
+
+  const handleUpdateStatus = async (
+    leadId: string,
+    status: "APPROVED" | "REJECTED",
+  ) => {
+    const actionText = status === "APPROVED" ? "approve" : "reject";
+    if (
+      !confirm(`Are you sure you want to ${actionText} this booking request?`)
+    ) {
+      return;
+    }
+
+    setProcessingStatus(status);
+    try {
+      const res = await fetch(`${API}/leads/${leadId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("Failed to update status");
+
+      // Update local state lists
+      setLeads((prev) =>
+        prev.map((l) => (l.id === leadId ? { ...l, status } : l)),
+      );
+      setSelectedLead((prev) =>
+        prev && prev.id === leadId ? { ...prev, status } : prev,
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status. Please try again.");
+    } finally {
+      setProcessingStatus(null);
+    }
+  };
 
   const formatDate = (dateStr: string) => {
     try {
@@ -125,6 +166,32 @@ export default function LeadsClientPage({
       ),
     },
     {
+      key: "status",
+      header: "Status",
+      align: "center",
+      cell: (row) => {
+        const status = row.status || "PENDING";
+        const isApproved = status === "APPROVED";
+        const isRejected = status === "REJECTED";
+        return (
+          <span
+            className={cn(
+              "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border",
+              isApproved &&
+                "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-400",
+              isRejected &&
+                "bg-rose-50 text-rose-700 border-rose-100 dark:bg-rose-950/20 dark:text-rose-400",
+              !isApproved &&
+                !isRejected &&
+                "bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/20 dark:text-amber-400",
+            )}
+          >
+            {status}
+          </span>
+        );
+      },
+    },
+    {
       key: "id",
       header: "",
       align: "right",
@@ -185,8 +252,23 @@ export default function LeadsClientPage({
           {selectedLead && (
             <div className="p-6 sm:p-8 flex flex-col space-y-6">
               <div>
-                <span className="inline-flex items-center rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700 mb-2">
-                  Rental Request
+                <span
+                  className={cn(
+                    "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold mb-2 border",
+                    selectedLead.status === "APPROVED" &&
+                      "bg-emerald-50 text-emerald-700 border-emerald-100",
+                    selectedLead.status === "REJECTED" &&
+                      "bg-rose-50 text-rose-700 border-rose-100",
+                    (selectedLead.status === "PENDING" ||
+                      !selectedLead.status) &&
+                      "bg-orange-50 text-orange-700 border-orange-100",
+                  )}
+                >
+                  {selectedLead.status === "APPROVED" && "Approved"}
+                  {selectedLead.status === "REJECTED" && "Rejected"}
+                  {(selectedLead.status === "PENDING" ||
+                    !selectedLead.status) &&
+                    "Rental Request"}
                 </span>
                 <h2 className="text-xl font-bold text-zinc-900">
                   {selectedLead.firstName} {selectedLead.lastName}
@@ -283,13 +365,48 @@ export default function LeadsClientPage({
                 </div>
               </div>
 
-              <div className="pt-2 flex gap-3">
-                <Button
-                  className="w-full bg-zinc-900 hover:bg-zinc-800 text-white"
-                  onClick={() => setSelectedLead(null)}
-                >
-                  Close Details
-                </Button>
+              <div
+                className={cn(
+                  "pt-4 border-t border-zinc-100 gap-3",
+                  selectedLead.status === "PENDING" || !selectedLead.status
+                    ? "grid grid-cols-2"
+                    : "flex flex-col",
+                )}
+              >
+                {selectedLead.status === "PENDING" || !selectedLead.status ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      disabled={processingStatus !== null}
+                      className="w-full border-rose-200 text-rose-600 hover:bg-rose-50 rounded-xl"
+                      onClick={() =>
+                        handleUpdateStatus(selectedLead.id, "REJECTED")
+                      }
+                    >
+                      {processingStatus === "REJECTED"
+                        ? "Rejecting..."
+                        : "Reject Request"}
+                    </Button>
+                    <Button
+                      disabled={processingStatus !== null}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
+                      onClick={() =>
+                        handleUpdateStatus(selectedLead.id, "APPROVED")
+                      }
+                    >
+                      {processingStatus === "APPROVED"
+                        ? "Approving..."
+                        : "Approve Request"}
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    className="w-full bg-zinc-950 hover:bg-zinc-800 text-white rounded-xl"
+                    onClick={() => setSelectedLead(null)}
+                  >
+                    Close Details
+                  </Button>
+                )}
               </div>
             </div>
           )}

@@ -52,6 +52,7 @@ model Lead {
   dropOffDate     DateTime
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  status          String   @default("PENDING")
   vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
 }
 

@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-// beui.dev/components/motion/center-morph-modal
 
+import { EASE_OUT } from "@/lib/ease";
+import { PresenceGate } from "@/lib/presence-gate";
+import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
@@ -18,9 +21,6 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { EASE_OUT } from "@/lib/ease";
-import { PresenceGate } from "@/lib/presence-gate";
-import { cn } from "@/lib/utils";
 
 type CenterMorphModalContextValue = {
   open: boolean;
@@ -165,8 +165,7 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-const CENTER_FOLDED_CLIP =
-  "inset(48% 48% 48% 48% round 30px)";
+const CENTER_FOLDED_CLIP = "inset(48% 48% 48% 48% round 30px)";
 const CENTER_OPEN_CLIP = "inset(0% 0% 0% 0% round 30px)";
 
 // Complex clip-path strings can snap when a spring resolves its final distance.
@@ -202,16 +201,25 @@ export function CenterMorphModalContent({
 
   useEffect(() => setMounted(true), []);
 
+  const wasOpenRef = useRef(false);
+
   useEffect(() => {
-    if (!context.open) return;
+    if (!context.open) {
+      wasOpenRef.current = false;
+      return;
+    }
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const focusFrame = requestAnimationFrame(() => {
-      const [firstFocusable] = getFocusableElements(panelRef.current);
-      (firstFocusable ?? panelRef.current)?.focus();
-    });
+    let focusFrame: number | undefined;
+    if (!wasOpenRef.current) {
+      wasOpenRef.current = true;
+      focusFrame = requestAnimationFrame(() => {
+        const [firstFocusable] = getFocusableElements(panelRef.current);
+        (firstFocusable ?? panelRef.current)?.focus();
+      });
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && dismissible) {
@@ -241,7 +249,7 @@ export function CenterMorphModalContent({
 
     window.addEventListener("keydown", onKeyDown);
     return () => {
-      cancelAnimationFrame(focusFrame);
+      if (focusFrame !== undefined) cancelAnimationFrame(focusFrame);
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
       document.getElementById(context.triggerId)?.focus();
@@ -334,9 +342,7 @@ export function CenterMorphModalContent({
                         aria-label={closeButtonLabel}
                         onClick={() => context.setOpen(false)}
                         initial={
-                          reduce
-                            ? { opacity: 0 }
-                            : { opacity: 0, scale: 0.8 }
+                          reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8 }
                         }
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{

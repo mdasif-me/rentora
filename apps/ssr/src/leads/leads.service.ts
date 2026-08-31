@@ -78,4 +78,45 @@ export class LeadsService {
         : undefined,
     }));
   }
+
+  async updateStatus(id: string, status: string): Promise<Lead> {
+    const updated = await this.prisma.lead.update({
+      where: { id },
+      data: { status },
+      include: {
+        vehicle: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+
+    this.logger.log(`Lead ${id} status updated to ${status}`);
+
+    return {
+      ...updated,
+      pickUpDate: updated.pickUpDate.toISOString(),
+      dropOffDate: updated.dropOffDate.toISOString(),
+      vehicle: updated.vehicle
+        ? {
+            ...updated.vehicle,
+            image: updated.vehicle.image ?? undefined,
+            transmission: updated.vehicle.transmission as 'Auto' | 'Manual',
+            category: updated.vehicle.category
+              ? {
+                  id: updated.vehicle.category.id,
+                  name: updated.vehicle.category.name,
+                  slug: updated.vehicle.category.slug,
+                  isActive: updated.vehicle.category.isActive,
+                  order: updated.vehicle.category.order,
+                  image: updated.vehicle.category.image ?? undefined,
+                  description:
+                    updated.vehicle.category.description ?? undefined,
+                }
+              : undefined,
+          }
+        : undefined,
+    };
+  }
 }

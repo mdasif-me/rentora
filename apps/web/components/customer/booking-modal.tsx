@@ -9,6 +9,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/motion/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/motion/select";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { Vehicle } from "@rentora/types";
@@ -21,7 +28,7 @@ import {
   Phone,
   User,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
@@ -29,12 +36,14 @@ interface BookingModalProps {
   vehicle: Vehicle | null;
   isOpen: boolean;
   onClose: () => void;
+  availableLocations?: string[];
 }
 
 export default function BookingModal({
   vehicle,
   isOpen,
   onClose,
+  availableLocations = [],
 }: BookingModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -50,6 +59,9 @@ export default function BookingModal({
 
   const [pickupDate, setPickupDate] = useState<Date | undefined>(undefined);
   const [dropoffDate, setDropoffDate] = useState<Date | undefined>(undefined);
+
+  const [isManualDropoff, setIsManualDropoff] = useState(false);
+  const [manualDropoffValue, setManualDropoffValue] = useState("");
 
   const [prevVehicleId, setPrevVehicleId] = useState<string | null>(null);
 
@@ -67,16 +79,28 @@ export default function BookingModal({
     });
     setPickupDate(undefined);
     setDropoffDate(undefined);
+    setIsManualDropoff(false);
+    setManualDropoffValue("");
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!vehicle || isSubmitting || !pickupDate || !dropoffDate) return;
+    if (
+      !vehicle ||
+      isSubmitting ||
+      !pickupDate ||
+      !dropoffDate ||
+      !formData.pickUpLocation ||
+      !formData.dropOffLocation
+    )
+      return;
 
     setIsSubmitting(true);
     try {
@@ -104,13 +128,27 @@ export default function BookingModal({
     }
   };
 
+  const pickupLocations =
+    availableLocations && availableLocations.length > 0
+      ? availableLocations
+      : vehicle?.location
+        ? [vehicle.location]
+        : [];
+
+  const dropoffLocations = [
+    ...pickupLocations.filter((loc) => loc !== formData.pickUpLocation),
+    "Other (Type Manually)",
+  ];
+
+  const handleOpenChange = useCallback(
+    (val: boolean) => {
+      if (!val) onClose();
+    },
+    [onClose],
+  );
+
   return (
-    <CenterMorphModal
-      open={isOpen}
-      onOpenChange={(val) => {
-        if (!val) onClose();
-      }}
-    >
+    <CenterMorphModal open={isOpen} onOpenChange={handleOpenChange}>
       <CenterMorphModalContent
         ariaLabel="Car Rental Booking Modal"
         className="max-w-[560px] md:max-w-[620px] p-8 md:p-10"
@@ -234,16 +272,31 @@ export default function BookingModal({
                       Pick-up Location
                     </label>
                     <div className="relative">
-                      <input
-                        required
-                        type="text"
-                        name="pickUpLocation"
+                      <Select
                         value={formData.pickUpLocation}
-                        onChange={handleInputChange}
-                        placeholder="Location"
-                        className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 shadow-sm"
-                      />
-                      <MapPin className="absolute left-3 top-3 text-zinc-400 h-4 w-4" />
+                        onValueChange={(val) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            pickUpLocation: val,
+                            dropOffLocation:
+                              prev.dropOffLocation === val
+                                ? ""
+                                : prev.dropOffLocation,
+                          }));
+                        }}
+                      >
+                        <SelectTrigger className="pl-9 h-10 pr-3 text-xs border-zinc-200">
+                          <SelectValue placeholder="Select Location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {pickupLocations.map((loc) => (
+                            <SelectItem key={loc} value={loc}>
+                              {loc}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <MapPin className="absolute left-3 top-3 text-zinc-400 h-4 w-4 pointer-events-none z-20" />
                     </div>
                   </div>
                   <div>
@@ -251,17 +304,61 @@ export default function BookingModal({
                       Drop-off Location
                     </label>
                     <div className="relative">
-                      <input
-                        required
-                        type="text"
-                        name="dropOffLocation"
-                        value={formData.dropOffLocation}
-                        onChange={handleInputChange}
-                        placeholder="Location"
-                        className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 shadow-sm"
-                      />
-                      <MapPin className="absolute left-3 top-3 text-zinc-400 h-4 w-4" />
+                      <Select
+                        value={
+                          isManualDropoff
+                            ? "Other (Type Manually)"
+                            : formData.dropOffLocation
+                        }
+                        onValueChange={(val) => {
+                          if (val === "Other (Type Manually)") {
+                            setIsManualDropoff(true);
+                            setFormData((prev) => ({
+                              ...prev,
+                              dropOffLocation: manualDropoffValue,
+                            }));
+                          } else {
+                            setIsManualDropoff(false);
+                            setFormData((prev) => ({
+                              ...prev,
+                              dropOffLocation: val,
+                            }));
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="pl-9 h-10 pr-3 text-xs border-zinc-200">
+                          <SelectValue placeholder="Select Location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {dropoffLocations.map((loc) => (
+                            <SelectItem key={loc} value={loc}>
+                              {loc}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <MapPin className="absolute left-3 top-3 text-zinc-400 h-4 w-4 pointer-events-none z-20" />
                     </div>
+                    {isManualDropoff && (
+                      <div className="mt-2 relative animate-in fade-in slide-in-from-top-1 duration-200">
+                        <input
+                          required
+                          type="text"
+                          placeholder="Type Drop-off Location"
+                          value={manualDropoffValue}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setManualDropoffValue(val);
+                            setFormData((prev) => ({
+                              ...prev,
+                              dropOffLocation: val,
+                            }));
+                          }}
+                          className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 shadow-sm bg-white"
+                        />
+                        <MapPin className="absolute left-3 top-3 text-zinc-400 h-4 w-4" />
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -1,8 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
-import type { BestSeller, DashboardStats, Transaction } from '@rentora/types';
-import { DashboardService } from './dashboard.service.js';
-
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { RentalDashboardStats } from './dashboard.service.js';
+import { DashboardService } from './dashboard.service.js';
 
 @ApiTags('Dashboard')
 @Controller({
@@ -13,20 +12,8 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get high-level dashboard statistics' })
-  async getStats(): Promise<DashboardStats> {
+  @ApiOperation({ summary: 'Get fully-dynamic dashboard stats — earnings, leads, vehicles, multi-range chart' })
+  async getStats(): Promise<RentalDashboardStats> {
     return this.dashboardService.getStats();
-  }
-
-  @Get('transactions')
-  @ApiOperation({ summary: 'Get recent transactions' })
-  async getTransactions(): Promise<Transaction[]> {
-    return this.dashboardService.getTransactions();
-  }
-
-  @Get('bestsellers')
-  @ApiOperation({ summary: 'Get best selling vehicles' })
-  async getBestSellers(): Promise<BestSeller[]> {
-    return this.dashboardService.getBestSellers();
   }
 }
