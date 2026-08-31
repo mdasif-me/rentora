@@ -29,7 +29,6 @@ import {
   LayoutGrid,
   PanelLeft,
   Search,
-  Sparkles,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -122,14 +121,6 @@ export default function AdminLayout({
                       onSelect={() => setActive("Search")}
                     >
                       Search
-                    </AnimatedSidebarMenuButton>
-                  </AnimatedSidebarMenuItem>
-                  <AnimatedSidebarMenuItem>
-                    <AnimatedSidebarMenuButton
-                      icon={<Sparkles className="size-4" />}
-                      onSelect={() => setActive("AI Assistant")}
-                    >
-                      AI Assistant
                     </AnimatedSidebarMenuButton>
                   </AnimatedSidebarMenuItem>
                 </AnimatedSidebarMenu>

@@ -35,6 +35,7 @@ export interface Lead {
   pickUpDate: string;
   dropOffDate: string;
   createdAt: Date;
+  vehicle?: Vehicle;
 }
 
 export interface Transaction {

@@ -44,6 +44,7 @@ export default function Search({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     const searchParams = {
       pickupCity: pickupEnabled ? pickupCity : "",
       pickupDate: pickupEnabled ? pickupDate : undefined,

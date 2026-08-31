@@ -45,11 +45,37 @@ export class LeadsService {
   }
 
   async getLeads(): Promise<Lead[]> {
-    const leads: PrismaLead[] = await this.prisma.lead.findMany();
-    return leads.map((l: PrismaLead): Lead => ({
+    const leads = await this.prisma.lead.findMany({
+      include: {
+        vehicle: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+    return leads.map((l): Lead => ({
       ...l,
       pickUpDate: l.pickUpDate.toISOString(),
       dropOffDate: l.dropOffDate.toISOString(),
+      vehicle: l.vehicle
+        ? {
+            ...l.vehicle,
+            image: l.vehicle.image ?? undefined,
+            transmission: l.vehicle.transmission as 'Auto' | 'Manual',
+            category: l.vehicle.category
+              ? {
+                  id: l.vehicle.category.id,
+                  name: l.vehicle.category.name,
+                  slug: l.vehicle.category.slug,
+                  isActive: l.vehicle.category.isActive,
+                  order: l.vehicle.category.order,
+                  image: l.vehicle.category.image ?? undefined,
+                  description: l.vehicle.category.description ?? undefined,
+                }
+              : undefined,
+          }
+        : undefined,
     }));
   }
 }

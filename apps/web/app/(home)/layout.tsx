@@ -1,3 +1,4 @@
+import AiAssistantBubble from "@/components/container/ai-assistant-bubble";
 import { Footer, Navigation } from "@/components/container/layout";
 
 export default function PagesLayout({
@@ -10,6 +11,7 @@ export default function PagesLayout({
       <Navigation />
       {children}
       <Footer />
+      <AiAssistantBubble />
     </>
   );
 }
