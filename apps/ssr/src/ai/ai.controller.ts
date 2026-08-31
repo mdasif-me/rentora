@@ -22,4 +22,13 @@ export class AiController {
   ): Promise<{ explanation: string; vehicles: Vehicle[] }> {
     return this.aiService.recommendVehicles(dto.prompt);
   }
+
+  @Post('admin-chat')
+  @ApiOperation({
+    summary:
+      'Admin AI chat — ask questions about leads, earnings, and fleet in natural language',
+  })
+  async adminChat(@Body('prompt') prompt: string): Promise<{ answer: string }> {
+    return this.aiService.adminChat(prompt ?? '');
+  }
 }

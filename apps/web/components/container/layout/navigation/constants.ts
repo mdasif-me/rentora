@@ -1,4 +1,4 @@
-import type { NavItem, AuthAction } from "./types";
+import type { AuthAction, NavItem } from "./types";
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { id: "home", label: "Home", href: "#hero" },
@@ -9,8 +9,20 @@ export const NAV_ITEMS: readonly NavItem[] = [
 ] as const;
 
 export const AUTH_ACTIONS: readonly AuthAction[] = [
-  { id: "register", label: "Register", href: "#register", variant: "link", size: "default" },
-  { id: "login", label: "Login", href: "#login", variant: "default", size: "default" },
+  {
+    id: "register",
+    label: "Register",
+    href: "#register",
+    variant: "link",
+    size: "default",
+  },
+  {
+    id: "admin",
+    label: "Admin Panel",
+    href: "/admin",
+    variant: "default",
+    size: "default",
+  },
 ] as const;
 
 export const BRAND_NAME = "Rentora";

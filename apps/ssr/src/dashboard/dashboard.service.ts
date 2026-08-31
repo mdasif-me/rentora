@@ -25,9 +25,9 @@ export interface RentalDashboardStats {
   maxPrice: number;
   /** Chart data keyed by range */
   chart: {
-    hourly: ChartPoint[];   // last 24 hours, per hour
-    daily: ChartPoint[];    // last 30 days, per day
-    monthly: ChartPoint[];  // last 12 months, per month
+    hourly: ChartPoint[]; // last 24 hours, per hour
+    daily: ChartPoint[]; // last 30 days, per day
+    monthly: ChartPoint[]; // last 12 months, per month
     quarterly: ChartPoint[]; // last 3 months, per month (same as monthly[last 3])
   };
   /** Latest 10 leads with vehicle details */
@@ -86,9 +86,9 @@ export class DashboardService {
       _max: { pricePerDay: true },
     });
 
-    // ── 4. Chart: hourly (last 24 h) ──────────────────────────────────────────
+    // ── 4. Chart: hourly (last 24 h) ─────────────────────────────────────────
     const hourlyStart = new Date(now);
-    hourlyStart.setHours(hourlyStart.getHours() - 23, 0, 0, 0);
+    hourlyStart.setUTCHours(hourlyStart.getUTCHours() - 23, 0, 0, 0);
 
     const hourlyLeads = await this.prisma.lead.findMany({
       where: { createdAt: { gte: hourlyStart } },
@@ -98,21 +98,23 @@ export class DashboardService {
     const hourlyMap: Record<string, number> = {};
     for (let h = 0; h < 24; h++) {
       const d = new Date(hourlyStart);
-      d.setHours(hourlyStart.getHours() + h);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}`;
+      d.setUTCHours(hourlyStart.getUTCHours() + h);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}T${String(d.getUTCHours()).padStart(2, '0')}`;
       hourlyMap[key] = 0;
     }
     for (const lead of hourlyLeads) {
       const d = lead.createdAt;
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}`;
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}T${String(d.getUTCHours()).padStart(2, '0')}`;
       if (key in hourlyMap) hourlyMap[key]++;
     }
-    const hourly: ChartPoint[] = Object.entries(hourlyMap).map(([label, count]) => ({ label, count }));
+    const hourly: ChartPoint[] = Object.entries(hourlyMap).map(
+      ([label, count]) => ({ label, count }),
+    );
 
-    // ── 5. Chart: daily (last 30 days) ────────────────────────────────────────
+    // ── 5. Chart: daily (last 30 days) ───────────────────────────────────────
     const dailyStart = new Date(now);
-    dailyStart.setDate(dailyStart.getDate() - 29);
-    dailyStart.setHours(0, 0, 0, 0);
+    dailyStart.setUTCDate(dailyStart.getUTCDate() - 29);
+    dailyStart.setUTCHours(0, 0, 0, 0);
 
     const dailyLeads = await this.prisma.lead.findMany({
       where: { createdAt: { gte: dailyStart } },
@@ -122,21 +124,24 @@ export class DashboardService {
     const dailyMap: Record<string, number> = {};
     for (let i = 0; i < 30; i++) {
       const d = new Date(dailyStart);
-      d.setDate(d.getDate() + i);
-      const key = d.toISOString().slice(0, 10);
+      d.setUTCDate(dailyStart.getUTCDate() + i);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
       dailyMap[key] = 0;
     }
     for (const lead of dailyLeads) {
-      const key = lead.createdAt.toISOString().slice(0, 10);
+      const d = lead.createdAt;
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
       if (key in dailyMap) dailyMap[key]++;
     }
-    const daily: ChartPoint[] = Object.entries(dailyMap).map(([label, count]) => ({ label, count }));
+    const daily: ChartPoint[] = Object.entries(dailyMap).map(
+      ([label, count]) => ({ label, count }),
+    );
 
-    // ── 6. Chart: monthly (last 12 months) ────────────────────────────────────
+    // ── 6. Chart: monthly (last 12 months) ───────────────────────────────────
     const monthlyStart = new Date(now);
-    monthlyStart.setMonth(monthlyStart.getMonth() - 11);
-    monthlyStart.setDate(1);
-    monthlyStart.setHours(0, 0, 0, 0);
+    monthlyStart.setUTCMonth(monthlyStart.getUTCMonth() - 11);
+    monthlyStart.setUTCDate(1);
+    monthlyStart.setUTCHours(0, 0, 0, 0);
 
     const monthlyLeads = await this.prisma.lead.findMany({
       where: { createdAt: { gte: monthlyStart } },
@@ -146,18 +151,20 @@ export class DashboardService {
     const monthlyMap: Record<string, number> = {};
     for (let i = 0; i < 12; i++) {
       const d = new Date(monthlyStart);
-      d.setMonth(d.getMonth() + i);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      d.setUTCMonth(monthlyStart.getUTCMonth() + i);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
       monthlyMap[key] = 0;
     }
     for (const lead of monthlyLeads) {
       const d = lead.createdAt;
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
       if (key in monthlyMap) monthlyMap[key]++;
     }
-    const monthly: ChartPoint[] = Object.entries(monthlyMap).map(([label, count]) => ({ label, count }));
+    const monthly: ChartPoint[] = Object.entries(monthlyMap).map(
+      ([label, count]) => ({ label, count }),
+    );
 
-    // ── 7. Chart: quarterly (last 3 months from monthly) ─────────────────────
+    // ── 7. Chart: quarterly (last 3 months) ──────────────────────────────────
     const quarterly = monthly.slice(-3);
 
     // ── 8. Recent leads ───────────────────────────────────────────────────────

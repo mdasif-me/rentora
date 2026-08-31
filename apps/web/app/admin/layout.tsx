@@ -116,12 +116,15 @@ export default function AdminLayout({
               <AnimatedSidebarGroupContent>
                 <AnimatedSidebarMenu>
                   <AnimatedSidebarMenuItem>
-                    <AnimatedSidebarMenuButton
-                      icon={<Search className="size-4" />}
-                      onSelect={() => setActive("Search")}
-                    >
-                      Search
-                    </AnimatedSidebarMenuButton>
+                    <Link href="/admin/search" className="w-full">
+                      <AnimatedSidebarMenuButton
+                        icon={<Search className="size-4" />}
+                        onSelect={() => setActive("Search")}
+                        isActive={pathname === "/admin/search"}
+                      >
+                        Search
+                      </AnimatedSidebarMenuButton>
+                    </Link>
                   </AnimatedSidebarMenuItem>
                 </AnimatedSidebarMenu>
               </AnimatedSidebarGroupContent>

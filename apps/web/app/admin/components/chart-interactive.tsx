@@ -52,7 +52,6 @@ function formatLabel(label: string, range: RangeKey): string {
       : d.toLocaleTimeString("en-US", {
           hour: "numeric",
           hour12: true,
-          timeZone: "UTC",
         });
   }
   if (range === "daily") {
@@ -62,7 +61,6 @@ function formatLabel(label: string, range: RangeKey): string {
       : d.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
-          timeZone: "UTC",
         });
   }
   if (range === "monthly" || range === "quarterly") {
